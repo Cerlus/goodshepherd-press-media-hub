@@ -7,8 +7,10 @@ Live: https://cerlus.github.io/goodshepherd-press-media-hub/
 ## Setup
 Settings → Pages → Source: **GitHub Actions**. The workflow deploys every push to `main` and builds `assets/press-kit/goodshepherd-press-kit.zip`.
 
-## Source of truth
-Brand art, the renderer and the marketing plan live in the game repo under `marketing/` (`branding/render.js` re-renders every capsule). Copy updated assets here.
+## Brand assets
+`python3 tools/brand.py` (needs `playwright` and `pillow`) draws the key illustration (`tools/scene.py`: layered cut paper in SVG, one logo-free 3840 x 2160 master saved to `assets/branding/source`), the logo (stacked, one-line), the emblem and app icon, and cuts every Steam capsule, the library hero and the social banners from that master. Outputs land in `assets/branding` (logos and SVG sources in `assets/branding/logo`) and `assets/previews`. The marketing plan lives with the game's marketing files.
+
+`assets/screenshots` holds work-in-progress captures from the development build; replace them with final screenshots when the Steam page goes up.
 
 ## Look
 The page background follows the day: the `data-bg` attribute on `<html>` picks the palette (`dusk` = Day to Night; also `night`, `meadow`, `wool`, `paper`).

@@ -17,6 +17,7 @@ _Last updated: 2026-11-09_
 - **Demo:** planned for Sheep Fest; Steam Next Fest (Feb 22 – Mar 1, 2027) is the natural follow-on
 - **Release:** TBA
 - **Price:** TBA
+- **Input:** Mouse and keyboard; controller support in progress
 - **Languages:** English (narration + subtitles)
 - **Press contact:** needle-blares.0m@icloud.com
 - **Socials:** https://linktr.ee/archiusdev
@@ -56,6 +57,8 @@ Use the one that matches the outlet. Same game, different front door.
 6. **One satchel, two worlds.** Oil, linen, hyssop and smooth stones gathered by day are your consumables below. An oil flask spent on a sheep's head is light you won't have tonight.
 7. **Weather with rules.** Fog halves your call range, rain lets sheep drink anywhere, and a red sky at evening means fair tomorrow.
 8. **A storybook world.** Flat-shaded paper-cut 3D, ink-hatched dungeons and hand-built paper cards.
+9. **Five lands.** The flock moves on through Green Pastures, the Dry Country, the Oasis, the High Snows and the Valley of the Shadows. Each land has its own weather and needs by day, and its own beasts below (scorpions, a crocodile, a wild boar, shades).
+10. **A flock that is yours.** Hats, scarves, flower crowns and angel wings for the sheep, and a cuddle button. None of it does anything; that is the point.
 
 ## Developer bio
 ArchiusDev is a Ghanaian-Canadian solo indie developer making thoughtful games that blend timeless forms with modern design. After *Mancalero* (a Mancala roguelike deckbuilder, Steam 2026), *Good Shepherd* pairs a cozy life sim with a narrated dungeon-crawler deckbuilder.
