@@ -23,7 +23,7 @@ jobs:
       - name: Package press kit
         run: |
           rm -f assets/press-kit/goodshepherd-press-kit.zip
-          zip -r -q assets/press-kit/goodshepherd-press-kit.zip assets/branding assets/cards assets/fonts/*OFL.txt FACT_SHEET.md
+          zip -r -q assets/press-kit/goodshepherd-press-kit.zip assets/branding assets/cards assets/screenshots assets/fonts/*OFL.txt FACT_SHEET.md
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
