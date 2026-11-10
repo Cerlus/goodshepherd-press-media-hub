@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Good Shepherd brand renderer: the logo (stacked, one-line, mark), the app icon, and every
-capsule and banner recomposed from the logo-free key art (steam/library-hero-3840x1240.png).
+capsule and banner cut from the illustration drawn by tools/scene.py.
 
     pip install playwright pillow   (Chromium for Playwright must be installed)
     python3 tools/brand.py          (writes into assets/branding and assets/previews)
@@ -10,6 +10,8 @@ strings below to change the mark. Colours are the brand palette on the press pag
 """
 import os, sys, asyncio, base64
 from PIL import Image
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import scene
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 B = os.path.join(ROOT, "assets", "branding")
@@ -152,6 +154,7 @@ def main():
             (logo_line(with_crook=False), 1500, 330, os.path.join(tmp, "line.png")),
             (logo_line(), 1500, 330, os.path.join(logo_dir, "logo-one-line-1500x330.png")),
             (mark(1024, "circle"), 1024, 1024, os.path.join(tmp, "mark.png")),
+            (scene.scene(), scene.W, scene.H, os.path.join(tmp, "scene.png")),
             (mark(1024, "squircle"), 1024, 1024, os.path.join(logo_dir, "app-icon-1024.png"))]
     asyncio.run(raster(jobs))
     if "--logos" in sys.argv:
@@ -166,43 +169,44 @@ def fit_logo(img, max_w, max_h):
     return img.resize((max(1, int(img.width * k)), max(1, int(img.height * k))), Image.LANCZOS)
 
 
-def crop_art(hero, w, h, focus_x, zoom=1.0, focus_y=0.5):
-    """Cut a w:h window out of the hero art centred on focus_x (0..1), as tall as allowed / zoom."""
-    ch = hero.height / zoom
+def crop_art(src, w, h, focus_x, focus_y=1.0):
+    """The largest w:h window of the scene, placed by focus (0..1 across, 0 top .. 1 bottom)."""
+    ch = src.height
     cw = ch * w / h
-    if cw > hero.width:
-        cw = hero.width
+    if cw > src.width:
+        cw = src.width
         ch = cw * h / w
-    x0 = min(max(focus_x * hero.width - cw / 2, 0), hero.width - cw)
-    y0 = min(max(focus_y * hero.height - ch / 2, 0), hero.height - ch)
-    return hero.crop((int(x0), int(y0), int(x0 + cw), int(y0 + ch))).resize((w, h), Image.LANCZOS)
+    x0 = min(max(focus_x * src.width - cw / 2, 0), src.width - cw)
+    y0 = (src.height - ch) * focus_y
+    return src.crop((int(x0), int(y0), int(x0 + cw), int(y0 + ch))).resize((w, h), Image.LANCZOS)
 
 
 def compose(tmp, logo_dir):
-    hero = Image.open(os.path.join(B, "steam/library-hero-3840x1240.png")).convert("RGB")
+    # the illustration itself (tools/scene.py): one logo-free master, everything else is cut from it
+    master = Image.open(os.path.join(tmp, "scene.png")).convert("RGB")
+    os.makedirs(os.path.join(B, "source"), exist_ok=True)
+    master.save(os.path.join(B, "source", "key-scene-3840x2160.png"))
+    master.crop((0, 800, 3840, 2040)).save(os.path.join(B, "steam/library-hero-3840x1240.png"))
+    master.crop((0, 800, 3840, 2040)).resize((1920, 620), Image.LANCZOS).save(os.path.join(ROOT, "assets/previews/hero.jpg"), quality=86)
+    master.resize((1438, 809), Image.LANCZOS).resize((1438, 810)).save(os.path.join(B, "steam/page-background-1438x810.png"))
     stack = Image.open(os.path.join(tmp, "stack.png")).convert("RGBA")
     line = Image.open(os.path.join(tmp, "line.png")).convert("RGBA")
-    # tall formats need more sky than the hero has: the same art with its top edge drawn upward
-    extra = int(hero.height * 0.55)
-    tall = Image.new("RGB", (hero.width, hero.height + extra))
-    tall.paste(hero.crop((0, 0, hero.width, 3)).resize((hero.width, extra), Image.BILINEAR), (0, 0))
-    tall.paste(hero, (0, extra))
     mark_img = Image.open(os.path.join(tmp, "mark.png")).convert("RGBA")
-    # name, size, art focus x, zoom, which logo, logo box (x, y, w, h as fractions), focus y
+    # name, size, focus x, focus y (1 = keep the ground, trim sky), which logo, logo box (x, y, w, h as fractions)
     plan = [
-        ("goodshepherd-key-art-1920x1080.png", (1920, 1080), 0.50, 1.0, stack, (0.03, 0.05, 0.40, 0.44), 0.5),
-        ("steam/main-capsule-1232x706.png", (1232, 706), 0.50, 1.0, stack, (0.02, 0.05, 0.38, 0.44), 0.5),
-        ("steam/header-capsule-920x430.png", (920, 430), 0.47, 1.0, stack, (0.03, 0.05, 0.44, 0.74), 0.5),
-        ("steam/small-capsule-462x174.png", (462, 174), 0.47, 1.0, line, (0.04, 0.16, 0.92, 0.68), 0.45),
-        ("steam/vertical-capsule-748x896.png", (748, 896), 0.52, 1.0, stack, (0.07, 0.03, 0.86, 0.33), 1.0),
-        ("steam/library-capsule-600x900.png", (600, 900), 0.535, 1.0, stack, (0.06, 0.03, 0.88, 0.30), 1.0),
-        ("steam/package-header-1414x464.png", (1414, 464), 0.44, 1.0, stack, (0.03, 0.06, 0.36, 0.78), 0.5),
-        ("social/x-bluesky-header-1500x500.png", (1500, 500), 0.46, 1.0, stack, (0.04, 0.08, 0.34, 0.76), 0.5),
-        ("social/youtube-banner-2560x1440.png", (2560, 1440), 0.50, 1.0, stack, (0.205, 0.37, 0.25, 0.26), 0.5),
-        ("social/portrait-post-1080x1350.png", (1080, 1350), 0.52, 1.0, stack, (0.08, 0.03, 0.84, 0.32), 1.0),
+        ("goodshepherd-key-art-1920x1080.png", (1920, 1080), 0.50, 1.0, stack, (0.035, 0.05, 0.36, 0.34)),
+        ("steam/main-capsule-1232x706.png", (1232, 706), 0.50, 1.0, stack, (0.03, 0.05, 0.38, 0.36)),
+        ("steam/header-capsule-920x430.png", (920, 430), 0.50, 0.93, stack, (0.03, 0.06, 0.40, 0.56)),
+        ("steam/small-capsule-462x174.png", (462, 174), 0.50, 0.80, line, (0.04, 0.16, 0.92, 0.68)),
+        ("steam/vertical-capsule-748x896.png", (748, 896), 0.545, 1.0, stack, (0.07, 0.03, 0.86, 0.33)),
+        ("steam/library-capsule-600x900.png", (600, 900), 0.55, 1.0, stack, (0.06, 0.035, 0.88, 0.30)),
+        ("steam/package-header-1414x464.png", (1414, 464), 0.50, 0.88, stack, (0.03, 0.07, 0.34, 0.62)),
+        ("social/x-bluesky-header-1500x500.png", (1500, 500), 0.50, 0.88, stack, (0.04, 0.08, 0.32, 0.62)),
+        ("social/youtube-banner-2560x1440.png", (2560, 1440), 0.50, 1.0, stack, (0.205, 0.37, 0.24, 0.24)),
+        ("social/portrait-post-1080x1350.png", (1080, 1350), 0.545, 1.0, stack, (0.08, 0.035, 0.84, 0.30)),
     ]
-    for name, (w, h), fx, zoom, logo, (lx, ly, lw, lh), fy in plan:
-        art = crop_art(tall if h > w else hero, w, h, fx, zoom, fy).convert("RGBA")
+    for name, (w, h), fx, fy, logo, (lx, ly, lw, lh) in plan:
+        art = crop_art(master, w, h, fx, fy).convert("RGBA")
         if logo is line:   # a small capsule is read at thumbnail size: quiet the art so the name carries
             veil = Image.new("RGBA", (w, h), (46, 38, 32, 96))
             art = Image.alpha_composite(art, veil)
