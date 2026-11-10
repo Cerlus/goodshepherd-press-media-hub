@@ -70,34 +70,73 @@ def sheep(cx, cy, s=1.0, face_right=True):
         f'<path d="M{hx-10*s},{cy} q{6*s},{6*s} {12*s},0 M{hx+4*s},{cy} q{5*s},{6*s} {10*s},0" stroke="{PAPER}" stroke-width="{3.2*s}" fill="none" stroke-linecap="round"/>')
 
 
+def paper_defs(w):
+    """Filters and the day-to-night gradients the title's sheets are cut from."""
+    def lg(i, a, b):
+        return (f'<linearGradient id="{i}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="{w}" y2="0"><stop offset=".30" stop-color="{a}"/>'
+                f'<stop offset=".78" stop-color="{b}"/></linearGradient>')
+    return ('<defs><filter id="lp" x="-10%" y="-25%" width="120%" height="160%"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#120c18" flood-opacity=".5"/></filter>'
+            '<filter id="lp2" x="-10%" y="-25%" width="120%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-color="#120c18" flood-opacity=".42"/></filter>'
+            '<filter id="paper" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#120c18" flood-opacity=".45"/></filter>'
+            # the back sheet is torn, not cut: a rough edge, as on an old dungeon map
+            '<filter id="torn" x="-10%" y="-25%" width="120%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="4" result="n"/>'
+            '<feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/>'
+            '<feDropShadow in="d" dx="0" dy="7" stdDeviation="6" flood-color="#120c18" flood-opacity=".5"/></filter>'
+            + lg("sh2", "#c9703f", "#5f4a9a") + lg("sh3", GOLD, "#b9c2ea") + lg("face", PAPER, "#eef0fa") + '</defs>')
+
+
+# the sheets of the lettering, back to front: (fill, how far it shows round the letter as a share of the size)
+SHEETS = [(INK, 0.150), ("url(#sh2)", 0.098), ("url(#sh3)", 0.050)]
+
+
+def paper_text(text, x, y, size, anchor="middle", spacing=0):
+    """Layered cut-paper lettering: a torn dark sheet at the back, then two coloured sheets, each
+    smaller than the one under it and casting its own shadow, then the face. Left to right the
+    sheets turn from the day's colours (terracotta, gold, cream) to the night's (plum, moonlight)."""
+    a = f'x="{x}" y="{y}" font-size="{size}" text-anchor="{anchor}" letter-spacing="{spacing}"'
+    out = ""
+    for k, (col, grow) in enumerate(SHEETS):
+        drop = size * 0.022 * (len(SHEETS) - k)
+        out += (f'<g filter="url(#{"torn" if k == 0 else "lp2"})"><text {a} transform="translate(0,{drop:.1f})" fill="{col}" stroke="{col}" '
+                f'stroke-width="{size*grow*2:.1f}">{text}</text></g>')
+    return out + f'<g filter="url(#lp2)"><text {a} fill="url(#face)">{text}</text></g>'
+
+
+def paper_staff(x0, x1, y, s=1.0):
+    """The crook lying on its side under the name, layered like the letters, its hook rising at
+    the right; a sheep stands on its day end and a wolf on its night end, facing each other."""
+    d = f"M{x0},{y} L{x1-120*s},{y} C{x1-10*s},{y} {x1},{y-70*s} {x1},{y-130*s} C{x1},{y-200*s} {x1-96*s},{y-200*s} {x1-96*s},{y-136*s}"
+    out = f'<g filter="url(#torn)"><path d="{d}" fill="none" stroke="{INK}" stroke-width="{46*s}" stroke-linecap="round" stroke-linejoin="round"/></g>'
+    out += f'<g filter="url(#lp2)"><path d="{d}" fill="none" stroke="{WOOD}" stroke-width="{26*s}" stroke-linecap="round" stroke-linejoin="round"/></g>'
+    out += f'<path d="{d}" fill="none" stroke="#9a7048" stroke-width="{7*s}" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,{-5*s})"/>'
+    top = y - 13 * s
+    out += scene.sheep(x0 + 104 * s, top - 74 * 0.7 * s, 0.7 * s, True)
+    wx = x1 - 150 * s
+    # the wolf is cut from night paper with a moonlit sheet behind it, so it shows on any ground
+    rim = scene.wolf(wx, top, 0.36 * s, "#b9c2ea")
+    out += (f'<g transform="translate({2*wx},0) scale(-1,1)"><g stroke="#b9c2ea" stroke-width="{16*s}" stroke-linejoin="round">{rim}</g>'
+            f'{scene.wolf(wx, top, 0.36 * s, "#3a2f62")}</g>')
+    return out
+
+
 def logo_stacked(w=1280, h=720, tagline=True, with_crook=True):
-    cx = 770
-    g = ['<g>']
-    if with_crook:   # (left off where the art already shows the shepherd's own crook)
-        g.append(crook(118, 70, 600, 1.0))
-    # GOOD, with a sun and a moon for its two O's: the day and the night of the game
-    g.append(layered("G", cx - 186, 236, 138))
-    g.append(sun(cx - 62, 187, 43))
-    g.append(moon(cx + 62, 187, 43))
-    g.append(layered("D", cx + 186, 236, 138))
-    g.append(layered("Shepherd", cx, 512, 212))
-    g.append(sheep(1010, 372, 0.62))   # one lamb, up on the letters
+    """The title: two lines of layered paper lettering over the shepherd's staff, a sheep on one
+    end of it and a wolf on the other."""
+    g = [paper_defs(w)]
+    g.append(paper_text("Good", 640, 232, 176))
+    g.append(paper_text("Shepherd", 640, 446, 204))
+    if with_crook:
+        g.append(paper_staff(30, 1252, 596))
     if tagline:
-        g.append(f'<text x="{cx}" y="640" font-size="38" text-anchor="middle" fill="{PAPER}" stroke="{INK}" stroke-width="9" style="font-family:Bree">Tend the flock by day. Go after the one by night.</text>')
-    g.append('</g>')
+        g.append(f'<text x="640" y="690" font-size="36" text-anchor="middle" fill="{PAPER}" stroke="{INK}" stroke-width="9">Tend the flock by day. Go after the one by night.</text>')
     return f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">{STYLE}{"".join(g)}</svg>'
 
 
 def logo_line(w=1500, h=330, with_crook=True):
-    """One line, for small spaces: crook, Good (sun and moon for the o's), Shepherd."""
-    size, base = 190, 236
-    r, cy = size * 0.235, base - size * 0.245
-    g = [crook(66, 44, 304, 0.6, lamp=False)] if with_crook else []
-    g.append(layered("G", 262, base, size))
-    g.append(sun(366, cy, r))
-    g.append(moon(478, cy, r))
-    g.append(layered("d", 578, base, size))
-    g.append(layered("Shepherd", 1058, base, size))
+    """One line, for small spaces."""
+    g = [paper_defs(w), paper_text("Good Shepherd", 750, 176, 150)]
+    if with_crook:
+        g.append(paper_staff(24, 1476, 290, 0.74))
     return f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">{STYLE}{"".join(g)}</svg>'
 
 
@@ -149,9 +188,9 @@ def main():
     for name, svg in [("logo-stacked.svg", logo_stacked()), ("logo-one-line.svg", logo_line()), ("mark-circle.svg", mark(1024, "circle")), ("mark-app.svg", mark(1024, "squircle"))]:
         open(os.path.join(logo_dir, name), "w").write(svg)
     jobs = [(logo_stacked(), 1280, 720, os.path.join(B, "steam/library-logo-1280x720.png")),
-            (logo_stacked(tagline=False), 1280, 720, os.path.join(tmp, "stack.png")),   # the crook and lamp live in the title
+            (logo_stacked(tagline=False), 1280, 720, os.path.join(tmp, "stack.png")),
             (logo_stacked(tagline=False), 1280, 720, os.path.join(logo_dir, "logo-stacked-1280x720.png")),
-            (logo_line(with_crook=False), 1500, 330, os.path.join(tmp, "line.png")),
+            (logo_line(), 1500, 330, os.path.join(tmp, "line.png")),
             (logo_line(), 1500, 330, os.path.join(logo_dir, "logo-one-line-1500x330.png")),
             (mark(1024, "circle"), 1024, 1024, os.path.join(tmp, "mark.png")),
             (scene.scene(), scene.W, scene.H, os.path.join(tmp, "scene.png")),
@@ -193,23 +232,25 @@ def compose(tmp, logo_dir):
     line = Image.open(os.path.join(tmp, "line.png")).convert("RGBA")
     mark_img = Image.open(os.path.join(tmp, "mark.png")).convert("RGBA")
     # name, size, focus x, focus y (1 = keep the ground, trim sky), which logo, logo box (x, y, w, h as fractions)
+    # The name never covers the shepherd and never sits in the top-left corner, where Steam
+    # hangs its own flags: on wide formats it goes on the night sky to his right, on tall ones
+    # in the sky above him with the top band left clear.
     plan = [
-        ("goodshepherd-key-art-1920x1080.png", (1920, 1080), 0.50, 1.0, stack, (0.03, 0.04, 0.42, 0.38)),
-        ("steam/main-capsule-1232x706.png", (1232, 706), 0.50, 1.0, stack, (0.025, 0.04, 0.44, 0.40)),
-        ("steam/header-capsule-920x430.png", (920, 430), 0.50, 0.93, stack, (0.02, 0.05, 0.45, 0.60)),
-        ("steam/small-capsule-462x174.png", (462, 174), 0.50, 0.80, line, (0.04, 0.16, 0.92, 0.68)),
-        ("steam/vertical-capsule-748x896.png", (748, 896), 0.545, 1.0, stack, (0.07, 0.03, 0.86, 0.33)),
-        ("steam/library-capsule-600x900.png", (600, 900), 0.55, 1.0, stack, (0.06, 0.035, 0.88, 0.30)),
-        ("steam/package-header-1414x464.png", (1414, 464), 0.50, 0.88, stack, (0.02, 0.06, 0.38, 0.68)),
-        ("social/x-bluesky-header-1500x500.png", (1500, 500), 0.50, 0.88, stack, (0.03, 0.07, 0.36, 0.68)),
-        ("social/youtube-banner-2560x1440.png", (2560, 1440), 0.50, 1.0, stack, (0.20, 0.36, 0.27, 0.27)),
-        ("social/portrait-post-1080x1350.png", (1080, 1350), 0.545, 1.0, stack, (0.08, 0.035, 0.84, 0.30)),
+        ("goodshepherd-key-art-1920x1080.png", (1920, 1080), 0.50, 1.0, stack, (0.595, 0.045, 0.385, 0.36)),
+        ("steam/main-capsule-1232x706.png", (1232, 706), 0.50, 1.0, stack, (0.595, 0.045, 0.385, 0.36)),
+        ("steam/header-capsule-920x430.png", (920, 430), 0.56, 0.93, stack, (0.60, 0.05, 0.385, 0.50)),
+        ("steam/small-capsule-462x174.png", (462, 174), 0.80, 0.86, line, (0.315, 0.10, 0.67, 0.80)),
+        ("steam/vertical-capsule-748x896.png", (748, 896), 0.53, 1.0, stack, (0.08, 0.125, 0.84, 0.28)),
+        ("steam/library-capsule-600x900.png", (600, 900), 0.53, 1.0, stack, (0.06, 0.13, 0.88, 0.26)),
+        ("steam/package-header-1414x464.png", (1414, 464), 0.58, 0.90, stack, (0.60, 0.06, 0.38, 0.60)),
+        ("social/x-bluesky-header-1500x500.png", (1500, 500), 0.58, 0.90, stack, (0.60, 0.06, 0.38, 0.60)),
+        ("social/youtube-banner-2560x1440.png", (2560, 1440), 0.50, 1.0, stack, (0.575, 0.355, 0.225, 0.21)),
+        ("social/portrait-post-1080x1350.png", (1080, 1350), 0.53, 1.0, stack, (0.08, 0.12, 0.84, 0.27)),
     ]
     for name, (w, h), fx, fy, logo, (lx, ly, lw, lh) in plan:
         art = crop_art(master, w, h, fx, fy).convert("RGBA")
-        if logo is line:   # a small capsule is read at thumbnail size: quiet the art so the name carries
-            veil = Image.new("RGBA", (w, h), (46, 38, 32, 96))
-            art = Image.alpha_composite(art, veil)
+        if logo is line:   # the small capsule: the shepherd at the left edge, the name across the night beside him
+            art = master.crop((1650, 1010, 3840, 1835)).resize((w, h), Image.LANCZOS).convert("RGBA")
         lg = fit_logo(logo, lw * w, lh * h)
         art.alpha_composite(lg, (int(lx * w + (lw * w - lg.width) / 2), int(ly * h + (lh * h - lg.height) / 2)))
         art.convert("RGB").save(os.path.join(B, name))

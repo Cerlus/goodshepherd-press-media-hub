@@ -168,12 +168,13 @@ def scene():
         sy = rnd.uniform(30, 1180)
         r = rnd.choice([3, 4, 5, 7])
         d.append(f'<circle cx="{sx:.0f}" cy="{sy:.0f}" r="{r}" fill="{PAPER}" opacity="{rnd.uniform(0.35, 0.95) * min(1.0, (sx - 2300) / 500):.2f}"/>')
-    for sx, sy, r in [(2760, 520, 22), (3560, 300, 26), (3040, 880, 18), (3700, 960, 20), (2900, 1000, 14)]:
+    for sx, sy, r in [(2460, 460, 20), (3740, 260, 24), (3700, 900, 20), (2560, 820, 14)]:
         d.append(f'<path d="M{sx},{sy-r} L{sx+r*0.25},{sy-r*0.25} L{sx+r},{sy} L{sx+r*0.25},{sy+r*0.25} L{sx},{sy+r} L{sx-r*0.25},{sy+r*0.25} L{sx-r},{sy} L{sx-r*0.25},{sy-r*0.25}Z" fill="{PAPER}"/>')
-    d.append(f'<g filter="url(#paper)"><path d="M3330,560 a170,170 0 1,0 135,305 a143,143 0 1,1 -135,-305z" fill="#f6ecd2"/></g>')
+    # the moon sits low on the night ridge, behind the wolf: the sky above it is left for the title
+    d.append(f'<circle cx="3075" cy="900" r="330" fill="#f6ecd2" opacity=".10"/><g filter="url(#paper)"><circle cx="3075" cy="900" r="188" fill="#f6ecd2"/></g><circle cx="3020" cy="850" r="34" fill="#e6dcc0"/><circle cx="3140" cy="960" r="22" fill="#e6dcc0"/><circle cx="3120" cy="820" r="14" fill="#e6dcc0"/>')
     # the sun, its glow, and paper clouds on the day side
     d.append(f'<circle cx="900" cy="960" r="560" fill="url(#sunglow)"/><g filter="url(#paper)"><circle cx="900" cy="960" r="190" fill="{GOLD}"/></g><circle cx="900" cy="960" r="142" fill="#f8dfa2"/>')
-    d.append(cloud(330, 900, 1.1) + cloud(1500, 330, 1.0, "#fbf3e0") + cloud(1330, 1010, 0.7, "#fbf3e0") + cloud(2560, 940, 0.8, "#9a7aa6") + cloud(520, 300, 1.2) + cloud(2900, 380, 0.9, "#5a477e"))
+    d.append(cloud(330, 900, 1.1) + cloud(1500, 330, 1.0, "#fbf3e0") + cloud(1330, 1010, 0.7, "#fbf3e0") + cloud(2520, 1010, 0.7, "#9a7aa6") + cloud(520, 300, 1.2) + cloud(3560, 1000, 0.6, "#5a477e"))
     # far hills, a lone wolf on the night ridge
     d.append(hill(1, [(0, 1250), (520, 1130), (1100, 1230), (1700, 1100), (2300, 1200), (2900, 1060), (3400, 1160), (W, 1100)]))
     d.append(wolf(3010, 1068, 0.62))
