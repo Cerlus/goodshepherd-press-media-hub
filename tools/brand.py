@@ -149,7 +149,7 @@ def main():
     for name, svg in [("logo-stacked.svg", logo_stacked()), ("logo-one-line.svg", logo_line()), ("mark-circle.svg", mark(1024, "circle")), ("mark-app.svg", mark(1024, "squircle"))]:
         open(os.path.join(logo_dir, name), "w").write(svg)
     jobs = [(logo_stacked(), 1280, 720, os.path.join(B, "steam/library-logo-1280x720.png")),
-            (logo_stacked(tagline=False, with_crook=False), 1280, 720, os.path.join(tmp, "stack.png")),
+            (logo_stacked(tagline=False), 1280, 720, os.path.join(tmp, "stack.png")),   # the crook and lamp live in the title
             (logo_stacked(tagline=False), 1280, 720, os.path.join(logo_dir, "logo-stacked-1280x720.png")),
             (logo_line(with_crook=False), 1500, 330, os.path.join(tmp, "line.png")),
             (logo_line(), 1500, 330, os.path.join(logo_dir, "logo-one-line-1500x330.png")),
@@ -194,15 +194,15 @@ def compose(tmp, logo_dir):
     mark_img = Image.open(os.path.join(tmp, "mark.png")).convert("RGBA")
     # name, size, focus x, focus y (1 = keep the ground, trim sky), which logo, logo box (x, y, w, h as fractions)
     plan = [
-        ("goodshepherd-key-art-1920x1080.png", (1920, 1080), 0.50, 1.0, stack, (0.035, 0.05, 0.36, 0.34)),
-        ("steam/main-capsule-1232x706.png", (1232, 706), 0.50, 1.0, stack, (0.03, 0.05, 0.38, 0.36)),
-        ("steam/header-capsule-920x430.png", (920, 430), 0.50, 0.93, stack, (0.03, 0.06, 0.40, 0.56)),
+        ("goodshepherd-key-art-1920x1080.png", (1920, 1080), 0.50, 1.0, stack, (0.03, 0.04, 0.42, 0.38)),
+        ("steam/main-capsule-1232x706.png", (1232, 706), 0.50, 1.0, stack, (0.025, 0.04, 0.44, 0.40)),
+        ("steam/header-capsule-920x430.png", (920, 430), 0.50, 0.93, stack, (0.02, 0.05, 0.45, 0.60)),
         ("steam/small-capsule-462x174.png", (462, 174), 0.50, 0.80, line, (0.04, 0.16, 0.92, 0.68)),
         ("steam/vertical-capsule-748x896.png", (748, 896), 0.545, 1.0, stack, (0.07, 0.03, 0.86, 0.33)),
         ("steam/library-capsule-600x900.png", (600, 900), 0.55, 1.0, stack, (0.06, 0.035, 0.88, 0.30)),
-        ("steam/package-header-1414x464.png", (1414, 464), 0.50, 0.88, stack, (0.03, 0.07, 0.34, 0.62)),
-        ("social/x-bluesky-header-1500x500.png", (1500, 500), 0.50, 0.88, stack, (0.04, 0.08, 0.32, 0.62)),
-        ("social/youtube-banner-2560x1440.png", (2560, 1440), 0.50, 1.0, stack, (0.205, 0.37, 0.24, 0.24)),
+        ("steam/package-header-1414x464.png", (1414, 464), 0.50, 0.88, stack, (0.02, 0.06, 0.38, 0.68)),
+        ("social/x-bluesky-header-1500x500.png", (1500, 500), 0.50, 0.88, stack, (0.03, 0.07, 0.36, 0.68)),
+        ("social/youtube-banner-2560x1440.png", (2560, 1440), 0.50, 1.0, stack, (0.20, 0.36, 0.27, 0.27)),
         ("social/portrait-post-1080x1350.png", (1080, 1350), 0.545, 1.0, stack, (0.08, 0.035, 0.84, 0.30)),
     ]
     for name, (w, h), fx, fy, logo, (lx, ly, lw, lh) in plan:

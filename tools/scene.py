@@ -99,23 +99,14 @@ def wolf(x, y, s=1.0, col="#17122a"):
 
 def shepherd(x, y, s=1.0):
     """The shepherd, feet at (x, y): robe and sash, headcloth, a kind face, the lamb across
-    his shoulders with its legs held at his chest, the crook in his other hand, a lamp on it."""
+    his shoulders, its legs held at his chest in both hands. (The crook and its lamp belong
+    to the title lettering, not to him: both his hands are full.)"""
     robe, robe_d, robe_l = "#8a5a36", "#6f4428", "#a8713f"
     skin, beard, cloth = "#b98458", "#3d2a1e", "#efe6d2"
     P = lambda dx, dy: f"{x+dx*s:.1f},{y+dy*s:.1f}"
     out = []
     # ground shadow
     out.append(f'<ellipse cx="{x}" cy="{y+6*s}" rx="{300*s}" ry="{34*s}" fill="#1c1420" opacity=".35"/>')
-    # the crook, behind his hand, with the lamp
-    sx, top = x - 300 * s, y - 1010 * s
-    hook = f"M{sx},{y+10*s} L{sx},{top+120*s} C{sx},{top-40*s} {sx-200*s},{top-40*s} {sx-200*s},{top+96*s} C{sx-200*s},{top+132*s} {sx-176*s},{top+150*s} {sx-150*s},{top+140*s}"
-    out.append(f'<g filter="url(#paper)"><path d="{hook}" fill="none" stroke="#5a3d26" stroke-width="{40*s}" stroke-linecap="round"/><path d="M{sx-8*s},{y} L{sx-8*s},{top+130*s}" stroke="#7a573a" stroke-width="{9*s}" stroke-linecap="round" opacity=".8"/></g>')
-    lx, ly = sx - 200 * s, top + 290 * s
-    out.append(f'<line x1="{lx}" y1="{top+120*s}" x2="{lx}" y2="{ly-10*s}" stroke="{INK}" stroke-width="{7*s}"/>'
-               f'<circle cx="{lx}" cy="{ly}" r="{210*s}" fill="url(#lampglow)"/>'
-               f'<g filter="url(#paper)"><path d="M{lx-74*s},{ly} L{lx+62*s},{ly} L{lx+104*s},{ly-20*s} L{lx+92*s},{ly+12*s} Q{lx+56*s},{ly+62*s} {lx-6*s},{ly+62*s} Q{lx-64*s},{ly+58*s} {lx-74*s},{ly}z" fill="#a4552c"/>'
-               f'<path d="M{lx-50*s},{ly+14*s} L{lx+54*s},{ly+14*s}" stroke="#c97a48" stroke-width="{9*s}" stroke-linecap="round"/></g>'
-               f'<path d="M{lx+98*s},{ly-22*s} q{-30*s},{-38*s} {4*s},{-86*s} q{30*s},{46*s} {-4*s},{86*s}z" fill="{GOLD}"/><path d="M{lx+98*s},{ly-26*s} q{-14*s},{-20*s} {2*s},{-46*s} q{14*s},{24*s} {-2*s},{46*s}z" fill="{PAPER}"/>')
     # robe: a broad bell, a lighter panel on the day side, darker folds on the night side
     out.append(f'<g filter="url(#paper)"><path d="M{P(-150,-690)} C{P(-190,-400)} {P(-260,-150)} {P(-290,0)} L{P(290,0)} C{P(260,-150)} {P(190,-400)} {P(150,-690)} Z" fill="{robe}"/>'
                f'<path d="M{P(-150,-690)} C{P(-190,-400)} {P(-260,-150)} {P(-290,0)} L{P(-110,0)} C{P(-100,-260)} {P(-70,-480)} {P(-50,-690)} Z" fill="{robe_l}"/>'
@@ -155,8 +146,6 @@ def shepherd(x, y, s=1.0):
                f'<path d="M{P(-66,-940)} q{26*s},{-14*s} {50*s},{-2*s} M{P(16,-942)} q{26*s},{-12*s} {50*s},{2*s}" stroke="{beard}" stroke-width="{9*s}" fill="none" stroke-linecap="round"/>'
                f'<path d="M{P(-6,-900)} q{-10*s},{30*s} {8*s},{38*s}" stroke="#9a6a44" stroke-width="{6*s}" fill="none" stroke-linecap="round"/>')
     out.append(f'<path d="M{P(-148,-952)} Q{P(0,-1010)} {P(148,-952)} L{P(150,-918)} Q{P(0,-976)} {P(-150,-918)} Z" fill="#c9483c"/>')
-    # the hand on the crook
-    out.append(f'<g filter="url(#paper)"><path d="M{P(-196,-690)} Q{P(-330,-640)} {P(-330,-560)} L{P(-270,-540)} Q{P(-250,-610)} {P(-160,-640)} Z" fill="{robe_l}"/><ellipse cx="{sx+4*s}" cy="{y-548*s}" rx="{44*s}" ry="{50*s}" fill="{skin}"/></g>')
     return "".join(out)
 
 
@@ -202,7 +191,7 @@ def scene():
     d.append(sheep(250, 1560, 1.0, True) + sheep(680, 1520, 0.8, False, True) + sheep(1080, 1610, 0.95, True, True) + sheep(1500, 1580, 0.8, False) + sheep(860, 1650, 0.5, True, False, True))
     d.append(hill(4, [(0, 1830), (700, 1760), (1500, 1850), (2100, 1780), (2800, 1860), (3400, 1790), (W, 1850)]))
     d.append(sheep(420, 1800, 1.3, True) + sheep(1330, 1820, 1.1, False, True) + sheep(1010, 1840, 0.62, True, False, True))
-    # the lamp's light spilling toward the night
+    # the last warm light of the day around him, spilling toward the night
     d.append(f'<ellipse cx="2020" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>')
     d.append(shepherd(2030, 1960, 1.0))
     # foreground: warm earth by day, cold by night, flowers and grass
