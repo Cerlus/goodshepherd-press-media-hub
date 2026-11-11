@@ -97,10 +97,13 @@ def wolf(x, y, s=1.0, col="#17122a"):
             f'<path d="M{x-140*s},{y-120*s} q{-80*s},{20*s} {-110*s},{90*s} q{60*s},{-30*s} {120*s},{-40*s}z"/></g><path d="M{x+138*s},{y-232*s} l{22*s},{-6*s} l{-16*s},{12*s}z" fill="#f2c64e"/>')
 
 
-def shepherd(x, y, s=1.0):
+def shepherd(x, y, s=1.0, lamb="across"):
     """The shepherd, feet at (x, y): robe and sash, headcloth, a kind face, the lamb across
     his shoulders, its legs held at his chest in both hands. (The crook and its lamp belong
-    to the title lettering, not to him: both his hands are full.)"""
+    to the title lettering, not to him: both his hands are full.)
+    lamb="upright": the lamb rides on his shoulders the right way up instead, its head over
+    the top of his, its forelegs down his chest in his hands (a capsule test)."""
+    up = lamb == "upright"
     robe, robe_d, robe_l = "#8a5a36", "#6f4428", "#a8713f"
     skin, beard, cloth = "#b98458", "#3d2a1e", "#efe6d2"
     P = lambda dx, dy: f"{x+dx*s:.1f},{y+dy*s:.1f}"
@@ -117,6 +120,8 @@ def shepherd(x, y, s=1.0):
                f'<path d="M{P(-30,-372)} L{P(22,-372)} L{P(34,-200)} L{P(-4,-230)} L{P(-42,-200)} Z" fill="#d9a85a"/></g>')
     # the lamb across his shoulders: body behind the neck, head by his right (our right) shoulder
     puffs = [(-250, -760, 86), (-150, -800, 96), (-40, -812, 90), (70, -812, 92), (170, -796, 96), (262, -760, 84), (-200, -720, 80), (200, -720, 80)]
+    if up:   # the lamb's body stands behind his head and shows either side of it
+        puffs = [(-232, -790, 82), (232, -790, 82), (-196, -900, 92), (196, -900, 92), (-140, -1012, 98), (140, -1012, 98), (0, -1080, 112), (0, -900, 120)]
     out.append(f'<g filter="url(#paper)" fill="{WOOL}">' + "".join(f'<circle cx="{x+px*s:.1f}" cy="{y+py*s:.1f}" r="{r*s:.1f}"/>' for px, py, r in puffs) + '</g>')
     out.append(f'<g fill="#e6dcc6" opacity=".8">' + "".join(f'<circle cx="{x+px*s:.1f}" cy="{y+(py+34)*s:.1f}" r="{r*s*0.6:.1f}"/>' for px, py, r in puffs[:6]) + '</g>')
     # shoulders and arms over the robe: both arms come up to hold the lamb's legs at his chest
@@ -126,16 +131,18 @@ def shepherd(x, y, s=1.0):
     out.append(f'<path d="M{P(-150,-700)} L{P(150,-700)} L{P(96,-540)} L{P(-96,-540)} Z" fill="{robe}"/><path d="M{P(-40,-700)} L{P(40,-700)} L{P(0,-610)} Z" fill="{robe_d}"/>')
     # lamb's legs hanging down his chest, one pair each side, and the hands that hold them
     for d in (-1, 1):
+        second = "" if up else f'<rect x="{x+(d*78-15)*s:.1f}" y="{y-760*s:.1f}" width="{30*s:.1f}" height="{206*s:.1f}" rx="{14*s:.1f}" fill="#efe7d6"/><rect x="{x+(d*78-17)*s:.1f}" y="{y-578*s:.1f}" width="{34*s:.1f}" height="{30*s:.1f}" rx="{10*s:.1f}" fill="{FACE}"/>'
         out.append(f'<g filter="url(#paper)"><rect x="{x+(d*118-17)*s:.1f}" y="{y-760*s:.1f}" width="{34*s:.1f}" height="{220*s:.1f}" rx="{15*s:.1f}" fill="{WOOL}"/>'
-                   f'<rect x="{x+(d*78-15)*s:.1f}" y="{y-760*s:.1f}" width="{30*s:.1f}" height="{206*s:.1f}" rx="{14*s:.1f}" fill="#efe7d6"/>'
-                   f'<rect x="{x+(d*118-19)*s:.1f}" y="{y-566*s:.1f}" width="{38*s:.1f}" height="{34*s:.1f}" rx="{10*s:.1f}" fill="{FACE}"/><rect x="{x+(d*78-17)*s:.1f}" y="{y-578*s:.1f}" width="{34*s:.1f}" height="{30*s:.1f}" rx="{10*s:.1f}" fill="{FACE}"/>'
+                   f'{second}'
+                   f'<rect x="{x+(d*118-19)*s:.1f}" y="{y-566*s:.1f}" width="{38*s:.1f}" height="{34*s:.1f}" rx="{10*s:.1f}" fill="{FACE}"/>'
                    f'<ellipse cx="{x+d*98*s:.1f}" cy="{y-640*s:.1f}" rx="{58*s:.1f}" ry="{44*s:.1f}" fill="{skin}"/>'
                    f'<path d="M{x+(d*98-40)*s:.1f},{y-650*s:.1f} h{80*s:.1f} M{x+(d*98-40)*s:.1f},{y-630*s:.1f} h{80*s:.1f}" stroke="#9a6a44" stroke-width="{5*s:.1f}" opacity=".6"/></g>')
     # the lamb's head resting by his shoulder, ear and a sleepy eye
     hx, hy = x + 300 * s, y - 800 * s
-    out.append(f'<g filter="url(#paper)"><ellipse cx="{hx}" cy="{hy}" rx="{64*s}" ry="{54*s}" fill="{FACE}"/><ellipse cx="{hx+44*s}" cy="{hy-40*s}" rx="{36*s}" ry="{17*s}" fill="{FACE}" transform="rotate(30 {hx+44*s} {hy-40*s})"/>'
-               f'<circle cx="{hx-40*s}" cy="{hy-46*s}" r="{40*s}" fill="{WOOL}"/></g>'
-               f'<path d="M{hx-22*s},{hy-4*s} q{14*s},{14*s} {28*s},0" stroke="{PAPER}" stroke-width="{6*s}" fill="none" stroke-linecap="round"/><ellipse cx="{hx+34*s}" cy="{hy+22*s}" rx="{12*s}" ry="{8*s}" fill="#2c211a"/>')
+    if not up:
+      out.append(f'<g filter="url(#paper)"><ellipse cx="{hx}" cy="{hy}" rx="{64*s}" ry="{54*s}" fill="{FACE}"/><ellipse cx="{hx+44*s}" cy="{hy-40*s}" rx="{36*s}" ry="{17*s}" fill="{FACE}" transform="rotate(30 {hx+44*s} {hy-40*s})"/>'
+                 f'<circle cx="{hx-40*s}" cy="{hy-46*s}" r="{40*s}" fill="{WOOL}"/></g>'
+                 f'<path d="M{hx-22*s},{hy-4*s} q{14*s},{14*s} {28*s},0" stroke="{PAPER}" stroke-width="{6*s}" fill="none" stroke-linecap="round"/><ellipse cx="{hx+34*s}" cy="{hy+22*s}" rx="{12*s}" ry="{8*s}" fill="#2c211a"/>')
     # head: the cloth, the face, the beard, the band
     out.append(f'<g filter="url(#paper)"><path d="M{P(-150,-900)} C{P(-160,-1070)} {P(160,-1070)} {P(150,-900)} L{P(176,-700)} Q{P(120,-680)} {P(96,-740)} L{P(-96,-740)} Q{P(-120,-680)} {P(-176,-700)} Z" fill="{cloth}"/>'
                f'<path d="M{P(40,-1024)} C{P(150,-1000)} {P(150,-900)} {P(150,-900)} L{P(176,-700)} Q{P(120,-680)} {P(96,-740)} Z" fill="#d9cdb4"/></g>')
@@ -146,6 +153,17 @@ def shepherd(x, y, s=1.0):
                f'<path d="M{P(-66,-940)} q{26*s},{-14*s} {50*s},{-2*s} M{P(16,-942)} q{26*s},{-12*s} {50*s},{2*s}" stroke="{beard}" stroke-width="{9*s}" fill="none" stroke-linecap="round"/>'
                f'<path d="M{P(-6,-900)} q{-10*s},{30*s} {8*s},{38*s}" stroke="#9a6a44" stroke-width="{6*s}" fill="none" stroke-linecap="round"/>')
     out.append(f'<path d="M{P(-148,-952)} Q{P(0,-1010)} {P(148,-952)} L{P(150,-918)} Q{P(0,-976)} {P(-150,-918)} Z" fill="#c9483c"/>')
+    if up:   # the lamb's head over the top of his, chin on the cloth, wide awake
+        ux, uy = x, y - 1118 * s
+        out.append(f'<g filter="url(#paper)">'
+                   f'<ellipse cx="{ux-96*s}" cy="{uy-6*s}" rx="{44*s}" ry="{20*s}" fill="{FACE}" transform="rotate(-18 {ux-96*s} {uy-6*s})"/>'
+                   f'<ellipse cx="{ux+96*s}" cy="{uy-6*s}" rx="{44*s}" ry="{20*s}" fill="{FACE}" transform="rotate(18 {ux+96*s} {uy-6*s})"/>'
+                   f'<path d="M{ux-74*s},{uy-40*s} Q{ux},{uy-84*s} {ux+74*s},{uy-40*s} L{ux+58*s},{uy+40*s} Q{ux},{uy+92*s} {ux-58*s},{uy+40*s} Z" fill="{FACE}"/>'
+                   f'<circle cx="{ux-34*s}" cy="{uy-62*s}" r="{38*s}" fill="{WOOL}"/><circle cx="{ux+30*s}" cy="{uy-66*s}" r="{40*s}" fill="{WOOL}"/><circle cx="{ux}" cy="{uy-86*s}" r="{36*s}" fill="{WOOL}"/></g>'
+                   f'<circle cx="{ux-30*s}" cy="{uy-4*s}" r="{13*s}" fill="{PAPER}"/><circle cx="{ux+30*s}" cy="{uy-4*s}" r="{13*s}" fill="{PAPER}"/>'
+                   f'<circle cx="{ux-28*s}" cy="{uy-2*s}" r="{7*s}" fill="#1c1410"/><circle cx="{ux+32*s}" cy="{uy-2*s}" r="{7*s}" fill="#1c1410"/>'
+                   f'<ellipse cx="{ux}" cy="{uy+44*s}" rx="{15*s}" ry="{10*s}" fill="#2c211a"/>'
+                   f'<path d="M{ux-16*s},{uy+62*s} q{16*s},{12*s} {32*s},0" stroke="{PAPER}" stroke-width="{5*s}" fill="none" stroke-linecap="round" opacity=".8"/>')
     return "".join(out)
 
 

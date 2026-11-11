@@ -53,15 +53,6 @@ def eyes(x, y, s=1.0):
 # (x, y, height; width follows the format), the logo box and the cards (file, centre x, centre y,
 # height, tilt in degrees), all as fractions of the capsule.
 CONCEPTS = {
-    # A. He fills the left of the frame with the lamb; his hand of cards is fanned on the night side.
-    "a-shepherd-and-hand": {
-        "say": "Shepherd + a hand of cards",
-        "extra": f'<ellipse cx="2030" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.shepherd(2030, 1960, 1.0) + eyes(3050, 1500, 0.9) + eyes(3260, 1420, 0.6),
-        "header": {"crop": (1560, 905, 800), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
-                   "cards": [("staff", 0.585, 0.93, 0.62, -13), ("bond", 0.74, 0.86, 0.66, 0), ("rod", 0.895, 0.93, 0.62, 13)]},
-        "small": {"crop": (1700, 930, 620), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
-                  "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
-    },
     # A, brighter: he stands in full daylight; the night is only the right-hand third, behind the name and the cards.
     "a2-shepherd-in-daylight": {
         "say": "A, with the day carried further across",
@@ -71,15 +62,13 @@ CONCEPTS = {
         "small": {"crop": (1170, 930, 620), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
                   "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
     },
-    # D. The game's own 3D sheep (tools/trailer/pose_sheep.gd in the game repo) in daylight, with the 2D cards.
-    "d-3d-sheep-2d-cards": {
-        "say": "3D sheep from the game, 2D cards",
-        "extra": S.cloud(1150, 1010, 0.8),
-        "header": {"crop": (760, 905, 860), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
-                   "models": [("sheep-left", 0.085, 0.60, 0.50, 0.75), ("sheep-right", 0.27, 0.56, 0.86, 1.0)],
+    # A, brighter, with the lamb riding upright: its head over the top of his, the right way up.
+    "a3-lamb-upright": {
+        "say": "A in daylight, the lamb upright on his shoulders",
+        "extra": f'<ellipse cx="1500" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.cloud(1050, 1010, 0.8) + S.shepherd(1500, 1960, 1.0, "upright"),
+        "header": {"crop": (980, 735, 900), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
                    "cards": [("staff", 0.585, 0.93, 0.62, -13), ("bond", 0.74, 0.86, 0.66, 0), ("rod", 0.895, 0.93, 0.62, 13)]},
-        "small": {"crop": (900, 1000, 640), "logo": (0.33, 0.08, 0.48, 0.84), "which": "line",
-                  "models": [("sheep-right", 0.17, 0.54, 0.98, 1.0)],
+        "small": {"crop": (1090, 735, 700), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
                   "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
     },
 }
