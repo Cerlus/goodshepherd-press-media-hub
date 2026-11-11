@@ -64,8 +64,10 @@ CONCEPTS = {
                  "cards": [("staff", 0.585, 0.95, 0.60, -13), ("rod", 0.895, 0.95, 0.60, 13), ("bond", 0.74, 0.88, 0.64, 0)]},
         "package": {"crop": (880, 740, 880), "logo": (0.36, 0.08, 0.36, 0.84), "which": "stack",
                     "cards": [("staff", 0.775, 0.80, 0.72, -12), ("rod", 0.925, 0.80, 0.72, 12), ("bond", 0.85, 0.72, 0.78, 0)]},
-        "small": {"crop": (1090, 735, 700), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
-                  "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
+        # the small capsule is seen at 231 px and smaller: the name is stacked and as large
+        # as the height allows, his head and the lamb's are whole, and one card says "cards"
+        "small": {"crop": (1215, 690, 760), "logo": (0.285, 0.04, 0.50, 0.92), "which": "stack",
+                  "cards": [("bond", 0.915, 0.62, 0.98, 8)]},
         "vertical": {"crop": (790, 330, 1700), "logo": (0.08, 0.035, 0.84, 0.22), "which": "stack",
                      "cards": [("staff", 0.27, 0.93, 0.30, -14), ("rod", 0.73, 0.93, 0.30, 14), ("bond", 0.5, 0.90, 0.33, 0)]},
         "library": {"crop": (930, 330, 1700), "logo": (0.06, 0.04, 0.88, 0.21), "which": "stack",
