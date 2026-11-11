@@ -106,7 +106,8 @@ def paper_staff(x0, x1, y, s=1.0):
     """The crook lying on its side under the name, layered like the letters, its hook rising at
     the right; a sheep stands on its day end and a wolf on its night end, facing each other."""
     d = f"M{x0},{y} L{x1-120*s},{y} C{x1-10*s},{y} {x1},{y-70*s} {x1},{y-130*s} C{x1},{y-200*s} {x1-96*s},{y-200*s} {x1-96*s},{y-136*s}"
-    out = f'<g filter="url(#torn)"><path d="{d}" fill="none" stroke="{INK}" stroke-width="{46*s}" stroke-linecap="round" stroke-linejoin="round"/></g>'
+    # a clean dark-wood edge and a soft shadow under it (the torn black sheet is for the letters only)
+    out = f'<g filter="url(#lp)"><path d="{d}" fill="none" stroke="#3f2a18" stroke-width="{34*s}" stroke-linecap="round" stroke-linejoin="round"/></g>'
     out += f'<g filter="url(#lp2)"><path d="{d}" fill="none" stroke="{WOOD}" stroke-width="{26*s}" stroke-linecap="round" stroke-linejoin="round"/></g>'
     out += f'<path d="{d}" fill="none" stroke="#9a7048" stroke-width="{7*s}" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,{-5*s})"/>'
     top = y - 13 * s
