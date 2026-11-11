@@ -62,23 +62,25 @@ CONCEPTS = {
         "small": {"crop": (1700, 930, 620), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
                   "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
     },
-    # B. The card is the picture: one sheep's bond card held up large, the flock it came from behind it.
-    "b-the-sheep-is-the-card": {
-        "say": "The sheep becomes the card",
-        "extra": S.sheep(1250, 1480, 3.0, True) + S.sheep(820, 1640, 1.6, True),
-        "header": {"crop": (760, 905, 860), "logo": (0.53, 0.05, 0.43, 0.44), "which": "stack",
-                   "cards": [("rod", 0.63, 1.02, 0.56, -12), ("staff", 0.875, 1.02, 0.56, 12), ("bond", 0.752, 0.93, 0.66, 2)]},
-        "small": {"crop": (900, 1090, 620), "logo": (0.36, 0.10, 0.46, 0.80), "which": "line",
-                  "cards": [("bond", 0.905, 0.60, 1.08, 7)]},
+    # A, brighter: he stands in full daylight; the night is only the right-hand third, behind the name and the cards.
+    "a2-shepherd-in-daylight": {
+        "say": "A, with the day carried further across",
+        "extra": f'<ellipse cx="1500" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.cloud(1050, 1010, 0.8) + S.shepherd(1500, 1960, 1.0),
+        "header": {"crop": (1030, 905, 800), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
+                   "cards": [("staff", 0.585, 0.93, 0.62, -13), ("bond", 0.74, 0.86, 0.66, 0), ("rod", 0.895, 0.93, 0.62, 13)]},
+        "small": {"crop": (1170, 930, 620), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
+                  "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
     },
-    # C. Two halves and nothing else: a sheep in daylight, eyes in the dark, the hand of cards between.
-    "c-day-night-cards": {
-        "say": "Day sheep, night eyes, cards between",
-        "extra": S.sheep(1260, 1500, 2.6, True) + eyes(2440, 1400, 1.5) + eyes(2620, 1560, 1.0) + eyes(2230, 1590, 0.8),
-        "header": {"crop": (900, 905, 860), "logo": (0.27, 0.035, 0.46, 0.44), "which": "stack",
-                   "cards": [("staff", 0.445, 1.0, 0.56, -16), ("bond", 0.54, 0.95, 0.60, 0), ("rod", 0.635, 1.0, 0.56, 16)]},
-        "small": {"crop": (1000, 1080, 600), "logo": (0.27, 0.10, 0.50, 0.80), "which": "line",
-                  "cards": [("bond", 0.90, 0.60, 1.08, 7)]},
+    # D. The game's own 3D sheep (tools/trailer/pose_sheep.gd in the game repo) in daylight, with the 2D cards.
+    "d-3d-sheep-2d-cards": {
+        "say": "3D sheep from the game, 2D cards",
+        "extra": S.cloud(1150, 1010, 0.8),
+        "header": {"crop": (760, 905, 860), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
+                   "models": [("sheep-left", 0.085, 0.60, 0.50, 0.75), ("sheep-right", 0.27, 0.56, 0.86, 1.0)],
+                   "cards": [("staff", 0.585, 0.93, 0.62, -13), ("bond", 0.74, 0.86, 0.66, 0), ("rod", 0.895, 0.93, 0.62, 13)]},
+        "small": {"crop": (900, 1000, 640), "logo": (0.33, 0.08, 0.48, 0.84), "which": "line",
+                  "models": [("sheep-right", 0.17, 0.54, 0.98, 1.0)],
+                  "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
     },
 }
 SIZES = {"header": (920, 430), "small": (462, 174)}
@@ -107,6 +109,20 @@ def build(key, fmt):
     x0, y0, ch = f["crop"]
     cw = ch * w / h
     art = Image.open(os.path.join(TMP, key + ".png")).convert("RGB").crop((int(x0), int(y0), int(x0 + cw), int(y0 + ch))).resize((w, h), Image.LANCZOS).convert("RGBA")
+    for name, cx, cy, ht, light in f.get("models", []):   # 3D cut-outs: centre x, centre y, height, brightness
+        m = Image.open(os.path.join(ROOT, "lab", "models", name + ".png")).convert("RGBA")
+        m = m.resize((int(m.width * ht * h / m.height), int(ht * h)), Image.LANCZOS)
+        if light != 1.0:
+            from PIL import ImageEnhance
+            r, g, b2, al = m.split()
+            m = Image.merge("RGBA", (*ImageEnhance.Brightness(Image.merge("RGB", (r, g, b2))).enhance(light).split(), al))
+        # a soft shadow on the ground under her, and a faint one behind
+        sh = Image.new("RGBA", art.size, (0, 0, 0, 0))
+        from PIL import ImageDraw
+        gx, gy = cx * w, cy * h + m.height * 0.47
+        ImageDraw.Draw(sh).ellipse((gx - m.width * 0.42, gy - m.height * 0.05, gx + m.width * 0.42, gy + m.height * 0.05), fill=(30, 22, 40, 110))
+        art.alpha_composite(sh.filter(ImageFilter.GaussianBlur(h * 0.012)))
+        art.alpha_composite(m, (int(cx * w - m.width / 2), int(cy * h - m.height / 2)))
     for name, cx, cy, ht, tilt in f["cards"]:
         cd = card(name, ht * h, tilt)
         art.alpha_composite(cd, (int(cx * w - cd.width / 2), int(cy * h - cd.height / 2)))
@@ -123,7 +139,7 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     raster([(k, backdrop(c["extra"])) for k, c in CONCEPTS.items()])
     now = [Image.open(os.path.join(brand.B, "steam", n)).convert("RGB") for n in ("header-capsule-920x430.png", "small-capsule-462x174.png")]
-    rows = [("now", "Shipped today", now[0], now[1])]
+    rows = []
     for k, c in CONCEPTS.items():
         rows.append((k, c["say"], build(k, "header"), build(k, "small")))
     # the sheet: header at full size, the small capsule at full size and at the 231 px Steam uses in lists
