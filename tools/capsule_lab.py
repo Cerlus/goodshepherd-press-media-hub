@@ -54,22 +54,22 @@ def eyes(x, y, s=1.0):
 # height, tilt in degrees), all as fractions of the capsule.
 CONCEPTS = {
     # The chosen capsule: the shepherd in daylight with the lamb upright on his shoulders,
-    # and three of the game's own cards (a fire staff's, a sheep's bond, a storm staff's).
+    # and three of the game's own cards (the Staff, a sheep's bond, the Rod).
     "capsule": {
         "say": "The shepherd, the lamb, a hand of cards",
         "extra": f'<ellipse cx="1500" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.cloud(1050, 1010, 0.8) + S.cloud(700, 620, 1.0) + S.shepherd(1500, 1960, 1.0, "upright"),
         "header": {"crop": (980, 735, 900), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
-                   "cards": [("kindle", 0.585, 0.95, 0.62, -13), ("squall", 0.895, 0.95, 0.62, 13), ("bond", 0.74, 0.88, 0.66, 0)]},
+                   "cards": [("staff", 0.585, 0.95, 0.62, -13), ("rod", 0.895, 0.95, 0.62, 13), ("bond", 0.74, 0.88, 0.66, 0)]},
         "main": {"crop": (980, 735, 900), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
-                 "cards": [("kindle", 0.585, 0.95, 0.60, -13), ("squall", 0.895, 0.95, 0.60, 13), ("bond", 0.74, 0.88, 0.64, 0)]},
+                 "cards": [("staff", 0.585, 0.95, 0.60, -13), ("rod", 0.895, 0.95, 0.60, 13), ("bond", 0.74, 0.88, 0.64, 0)]},
         "package": {"crop": (880, 740, 880), "logo": (0.36, 0.08, 0.36, 0.84), "which": "stack",
-                    "cards": [("kindle", 0.775, 0.80, 0.72, -12), ("squall", 0.925, 0.80, 0.72, 12), ("bond", 0.85, 0.72, 0.78, 0)]},
+                    "cards": [("staff", 0.775, 0.80, 0.72, -12), ("rod", 0.925, 0.80, 0.72, 12), ("bond", 0.85, 0.72, 0.78, 0)]},
         "small": {"crop": (1090, 735, 700), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
                   "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
         "vertical": {"crop": (790, 330, 1700), "logo": (0.08, 0.035, 0.84, 0.22), "which": "stack",
-                     "cards": [("kindle", 0.27, 0.93, 0.30, -14), ("squall", 0.73, 0.93, 0.30, 14), ("bond", 0.5, 0.90, 0.33, 0)]},
+                     "cards": [("staff", 0.27, 0.93, 0.30, -14), ("rod", 0.73, 0.93, 0.30, 14), ("bond", 0.5, 0.90, 0.33, 0)]},
         "library": {"crop": (930, 330, 1700), "logo": (0.06, 0.04, 0.88, 0.21), "which": "stack",
-                    "cards": [("kindle", 0.24, 0.93, 0.29, -14), ("squall", 0.76, 0.93, 0.29, 14), ("bond", 0.5, 0.90, 0.32, 0)]},
+                    "cards": [("staff", 0.24, 0.93, 0.29, -14), ("rod", 0.76, 0.93, 0.29, 14), ("bond", 0.5, 0.90, 0.32, 0)]},
     },
 }
 SIZES = {"header": (920, 430), "small": (462, 174), "main": (1232, 706), "package": (1414, 464), "vertical": (748, 896), "library": (600, 900)}
