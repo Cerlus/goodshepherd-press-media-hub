@@ -153,17 +153,23 @@ def shepherd(x, y, s=1.0, lamb="across"):
                f'<path d="M{P(-66,-940)} q{26*s},{-14*s} {50*s},{-2*s} M{P(16,-942)} q{26*s},{-12*s} {50*s},{2*s}" stroke="{beard}" stroke-width="{9*s}" fill="none" stroke-linecap="round"/>'
                f'<path d="M{P(-6,-900)} q{-10*s},{30*s} {8*s},{38*s}" stroke="#9a6a44" stroke-width="{6*s}" fill="none" stroke-linecap="round"/>')
     out.append(f'<path d="M{P(-148,-952)} Q{P(0,-1010)} {P(148,-952)} L{P(150,-918)} Q{P(0,-976)} {P(-150,-918)} Z" fill="#c9483c"/>')
-    if up:   # the lamb's head over the top of his, chin on the cloth, wide awake
-        ux, uy = x, y - 1118 * s
+    if up:   # the lamb's head over the top of his: round, wide-eyed, a little blush and a smile
+        ux, uy = x, y - 1124 * s
         out.append(f'<g filter="url(#paper)">'
-                   f'<ellipse cx="{ux-96*s}" cy="{uy-6*s}" rx="{44*s}" ry="{20*s}" fill="{FACE}" transform="rotate(-18 {ux-96*s} {uy-6*s})"/>'
-                   f'<ellipse cx="{ux+96*s}" cy="{uy-6*s}" rx="{44*s}" ry="{20*s}" fill="{FACE}" transform="rotate(18 {ux+96*s} {uy-6*s})"/>'
-                   f'<path d="M{ux-74*s},{uy-40*s} Q{ux},{uy-84*s} {ux+74*s},{uy-40*s} L{ux+58*s},{uy+40*s} Q{ux},{uy+92*s} {ux-58*s},{uy+40*s} Z" fill="{FACE}"/>'
-                   f'<circle cx="{ux-34*s}" cy="{uy-62*s}" r="{38*s}" fill="{WOOL}"/><circle cx="{ux+30*s}" cy="{uy-66*s}" r="{40*s}" fill="{WOOL}"/><circle cx="{ux}" cy="{uy-86*s}" r="{36*s}" fill="{WOOL}"/></g>'
-                   f'<circle cx="{ux-30*s}" cy="{uy-4*s}" r="{13*s}" fill="{PAPER}"/><circle cx="{ux+30*s}" cy="{uy-4*s}" r="{13*s}" fill="{PAPER}"/>'
-                   f'<circle cx="{ux-28*s}" cy="{uy-2*s}" r="{7*s}" fill="#1c1410"/><circle cx="{ux+32*s}" cy="{uy-2*s}" r="{7*s}" fill="#1c1410"/>'
-                   f'<ellipse cx="{ux}" cy="{uy+44*s}" rx="{15*s}" ry="{10*s}" fill="#2c211a"/>'
-                   f'<path d="M{ux-16*s},{uy+62*s} q{16*s},{12*s} {32*s},0" stroke="{PAPER}" stroke-width="{5*s}" fill="none" stroke-linecap="round" opacity=".8"/>')
+                   f'<ellipse cx="{ux-104*s}" cy="{uy+2*s}" rx="{46*s}" ry="{21*s}" fill="{FACE}" transform="rotate(-24 {ux-104*s} {uy+2*s})"/>'
+                   f'<ellipse cx="{ux+104*s}" cy="{uy+2*s}" rx="{46*s}" ry="{21*s}" fill="{FACE}" transform="rotate(24 {ux+104*s} {uy+2*s})"/>'
+                   f'<ellipse cx="{ux}" cy="{uy+8*s}" rx="{84*s}" ry="{78*s}" fill="{FACE}"/>'
+                   f'<circle cx="{ux-40*s}" cy="{uy-58*s}" r="{40*s}" fill="{WOOL}"/><circle cx="{ux+36*s}" cy="{uy-62*s}" r="{42*s}" fill="{WOOL}"/><circle cx="{ux}" cy="{uy-84*s}" r="{40*s}" fill="{WOOL}"/></g>'
+                   # ear linings
+                   f'<ellipse cx="{ux-106*s}" cy="{uy+4*s}" rx="{26*s}" ry="{10*s}" fill="#e8a59a" opacity=".85" transform="rotate(-24 {ux-106*s} {uy+4*s})"/>'
+                   f'<ellipse cx="{ux+106*s}" cy="{uy+4*s}" rx="{26*s}" ry="{10*s}" fill="#e8a59a" opacity=".85" transform="rotate(24 {ux+106*s} {uy+4*s})"/>'
+                   # big eyes with two glints each
+                   + "".join(f'<circle cx="{ux+d*34*s}" cy="{uy+4*s}" r="{20*s}" fill="{PAPER}"/><circle cx="{ux+d*33*s}" cy="{uy+6*s}" r="{14*s}" fill="#1c1410"/>'
+                             f'<circle cx="{ux+(d*33-5)*s}" cy="{uy+0*s}" r="{5.5*s}" fill="#ffffff"/><circle cx="{ux+(d*33+5)*s}" cy="{uy+11*s}" r="{2.6*s}" fill="#ffffff"/>' for d in (-1, 1))
+                   # blush, a small pink nose, a smile
+                   + f'<ellipse cx="{ux-58*s}" cy="{uy+38*s}" rx="{15*s}" ry="{9*s}" fill="#e8887c" opacity=".7"/><ellipse cx="{ux+58*s}" cy="{uy+38*s}" rx="{15*s}" ry="{9*s}" fill="#e8887c" opacity=".7"/>'
+                   f'<path d="M{ux-11*s},{uy+36*s} Q{ux},{uy+30*s} {ux+11*s},{uy+36*s} Q{ux},{uy+52*s} {ux-11*s},{uy+36*s} Z" fill="#e8a59a"/>'
+                   f'<path d="M{ux-18*s},{uy+56*s} Q{ux-9*s},{uy+68*s} {ux},{uy+56*s} Q{ux+9*s},{uy+68*s} {ux+18*s},{uy+56*s}" stroke="{PAPER}" stroke-width="{5*s}" fill="none" stroke-linecap="round"/>')
     return "".join(out)
 
 

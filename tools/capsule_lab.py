@@ -53,26 +53,29 @@ def eyes(x, y, s=1.0):
 # (x, y, height; width follows the format), the logo box and the cards (file, centre x, centre y,
 # height, tilt in degrees), all as fractions of the capsule.
 CONCEPTS = {
-    # A, brighter: he stands in full daylight; the night is only the right-hand third, behind the name and the cards.
-    "a2-shepherd-in-daylight": {
-        "say": "A, with the day carried further across",
-        "extra": f'<ellipse cx="1500" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.cloud(1050, 1010, 0.8) + S.shepherd(1500, 1960, 1.0),
-        "header": {"crop": (1030, 905, 800), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
-                   "cards": [("staff", 0.585, 0.93, 0.62, -13), ("bond", 0.74, 0.86, 0.66, 0), ("rod", 0.895, 0.93, 0.62, 13)]},
-        "small": {"crop": (1170, 930, 620), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
-                  "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
-    },
-    # A, brighter, with the lamb riding upright: its head over the top of his, the right way up.
-    "a3-lamb-upright": {
-        "say": "A in daylight, the lamb upright on his shoulders",
-        "extra": f'<ellipse cx="1500" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.cloud(1050, 1010, 0.8) + S.shepherd(1500, 1960, 1.0, "upright"),
+    # The chosen capsule: the shepherd in daylight with the lamb upright on his shoulders,
+    # and three of the game's own cards (a fire staff's, a sheep's bond, a storm staff's).
+    "capsule": {
+        "say": "The shepherd, the lamb, a hand of cards",
+        "extra": f'<ellipse cx="1500" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.cloud(1050, 1010, 0.8) + S.cloud(700, 620, 1.0) + S.shepherd(1500, 1960, 1.0, "upright"),
         "header": {"crop": (980, 735, 900), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
-                   "cards": [("staff", 0.585, 0.93, 0.62, -13), ("bond", 0.74, 0.86, 0.66, 0), ("rod", 0.895, 0.93, 0.62, 13)]},
+                   "cards": [("kindle", 0.585, 0.95, 0.62, -13), ("squall", 0.895, 0.95, 0.62, 13), ("bond", 0.74, 0.88, 0.66, 0)]},
+        "main": {"crop": (980, 735, 900), "logo": (0.50, 0.05, 0.47, 0.50), "which": "stack",
+                 "cards": [("kindle", 0.585, 0.95, 0.60, -13), ("squall", 0.895, 0.95, 0.60, 13), ("bond", 0.74, 0.88, 0.64, 0)]},
+        "package": {"crop": (880, 740, 880), "logo": (0.36, 0.08, 0.36, 0.84), "which": "stack",
+                    "cards": [("kindle", 0.775, 0.80, 0.72, -12), ("squall", 0.925, 0.80, 0.72, 12), ("bond", 0.85, 0.72, 0.78, 0)]},
         "small": {"crop": (1090, 735, 700), "logo": (0.30, 0.08, 0.50, 0.84), "which": "line",
                   "cards": [("bond", 0.905, 0.62, 1.05, 8)]},
+        "vertical": {"crop": (790, 330, 1700), "logo": (0.08, 0.035, 0.84, 0.22), "which": "stack",
+                     "cards": [("kindle", 0.27, 0.93, 0.30, -14), ("squall", 0.73, 0.93, 0.30, 14), ("bond", 0.5, 0.90, 0.33, 0)]},
+        "library": {"crop": (930, 330, 1700), "logo": (0.06, 0.04, 0.88, 0.21), "which": "stack",
+                    "cards": [("kindle", 0.24, 0.93, 0.29, -14), ("squall", 0.76, 0.93, 0.29, 14), ("bond", 0.5, 0.90, 0.32, 0)]},
     },
 }
-SIZES = {"header": (920, 430), "small": (462, 174)}
+SIZES = {"header": (920, 430), "small": (462, 174), "main": (1232, 706), "package": (1414, 464), "vertical": (748, 896), "library": (600, 900)}
+SHIP = {"header": "header-capsule-920x430.png", "small": "small-capsule-462x174.png", "main": "main-capsule-1232x706.png",
+        "package": "package-header-1414x464.png", "vertical": "vertical-capsule-748x896.png", "library": "library-capsule-600x900.png"}
+PREVIEW = {"header": "header", "small": "small", "main": "main", "package": "package", "vertical": "vertical", "library": "library"}
 
 
 def raster(jobs):
@@ -125,20 +128,28 @@ def build(key, fmt):
 
 
 def main():
+    """Draws the chosen capsule at every Steam size. With --ship it also writes them over
+    assets/branding/steam and the page's previews (the hero, page background and logos are
+    brand.py's and are left alone)."""
     os.makedirs(OUT, exist_ok=True)
     raster([(k, backdrop(c["extra"])) for k, c in CONCEPTS.items()])
-    now = [Image.open(os.path.join(brand.B, "steam", n)).convert("RGB") for n in ("header-capsule-920x430.png", "small-capsule-462x174.png")]
-    rows = []
-    for k, c in CONCEPTS.items():
-        rows.append((k, c["say"], build(k, "header"), build(k, "small")))
-    # the sheet: header at full size, the small capsule at full size and at the 231 px Steam uses in lists
-    sheet = Image.new("RGB", (920 + 30 + 462 + 30 + 231 + 40, len(rows) * 460 + 20), (27, 40, 56))   # Steam's own dark blue
-    for i, (_k, _say, head, small) in enumerate(rows):
-        y = 20 + i * 460
-        sheet.paste(head, (20, y))
-        sheet.paste(small, (970, y))
-        sheet.paste(small.resize((231, 87), Image.LANCZOS), (970, y + 200))
-        sheet.paste(head.resize((231, 108), Image.LANCZOS), (1220, y + 200))
+    made = {fmt: build("capsule", fmt) for fmt in SIZES}
+    if "--ship" in sys.argv:
+        for fmt, im in made.items():
+            im.save(os.path.join(brand.B, "steam", SHIP[fmt]))
+            pv = im if im.width <= 1280 else im.resize((1280, int(im.height * 1280 / im.width)), Image.LANCZOS)
+            pv.save(os.path.join(ROOT, "assets", "previews", PREVIEW[fmt] + ".jpg"), quality=86)
+    # the sheet: everything at Steam's real sizes on Steam's dark blue, plus the list sizes
+    sheet = Image.new("RGB", (1454 + 748 + 20 + 600 + 20, 1700), (27, 40, 56))
+    sheet.paste(made["main"], (20, 20))
+    sheet.paste(made["package"], (20, 746))
+    sheet.paste(made["header"], (20, 1230))
+    sheet.paste(made["small"], (960, 1230))
+    sheet.paste(made["small"].resize((231, 87), Image.LANCZOS), (960, 1424))
+    sheet.paste(made["header"].resize((231, 108), Image.LANCZOS), (1210, 1424))
+    sheet.paste(made["vertical"], (1454, 20))
+    sheet.paste(made["library"], (2222, 20))
+    sheet = sheet.crop((0, 0, sheet.width, 1680))
     sheet.save(os.path.join(OUT, "sheet.png"))
 
 
