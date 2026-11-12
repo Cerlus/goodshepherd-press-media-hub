@@ -106,7 +106,8 @@ def paper_staff(x0, x1, y, s=1.0):
     """The crook lying on its side under the name, layered like the letters, its hook rising at
     the right; a sheep stands on its day end and a wolf on its night end, facing each other."""
     d = f"M{x0},{y} L{x1-120*s},{y} C{x1-10*s},{y} {x1},{y-70*s} {x1},{y-130*s} C{x1},{y-200*s} {x1-96*s},{y-200*s} {x1-96*s},{y-136*s}"
-    out = f'<g filter="url(#torn)"><path d="{d}" fill="none" stroke="{INK}" stroke-width="{46*s}" stroke-linecap="round" stroke-linejoin="round"/></g>'
+    # a clean dark-wood edge and a soft shadow under it (the torn black sheet is for the letters only)
+    out = f'<g filter="url(#lp)"><path d="{d}" fill="none" stroke="#3f2a18" stroke-width="{34*s}" stroke-linecap="round" stroke-linejoin="round"/></g>'
     out += f'<g filter="url(#lp2)"><path d="{d}" fill="none" stroke="{WOOD}" stroke-width="{26*s}" stroke-linecap="round" stroke-linejoin="round"/></g>'
     out += f'<path d="{d}" fill="none" stroke="#9a7048" stroke-width="{7*s}" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,{-5*s})"/>'
     top = y - 13 * s
@@ -220,6 +221,55 @@ def crop_art(src, w, h, focus_x, focus_y=1.0):
     return src.crop((int(x0), int(y0), int(x0 + cw), int(y0 + ch))).resize((w, h), Image.LANCZOS)
 
 
+BANDS = ["#efc57a", "#d98f52", "#c06d48", "#a46361", "#855779", "#684d90", "#5e4899"]   # the logo's paper bands, day to night
+
+
+def frame(art, weight=1.0):
+    """A cut-paper border in the logo's own layers: an ink edge, a cream band, a thin band of
+    colour running day to night across the picture, and an ink hairline with a soft shadow
+    falling inside it. Corners of the window are rounded; the outside stays square (Steam
+    rounds or crops capsules itself). `weight` scales the border for very small formats."""
+    from PIL import ImageDraw, ImageFilter
+    w, h = art.size
+    k = 3                                    # supersample
+    u = max(2.0, min(w, h) * 0.011 * weight) * k   # one layer's width
+    W, H = w * k, h * k
+    def ring(outer, inner, radius):
+        m = Image.new("L", (W, H), 0)
+        d = ImageDraw.Draw(m)
+        d.rounded_rectangle((outer, outer, W - outer, H - outer), radius=max(radius + (inner - outer), 0), fill=255)
+        d.rounded_rectangle((inner, inner, W - inner, H - inner), radius=radius, fill=0)
+        return m
+    rad = u * 2.2
+    over = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    # soft shadow inside the window
+    sh = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(sh).rounded_rectangle((u * 3.0, u * 3.0, W - u * 3.0, H - u * 3.0), radius=rad, fill=255)
+    edge = Image.eval(sh.filter(ImageFilter.GaussianBlur(u * 1.2)), lambda v: int((255 - v) * 0.55))
+    over.paste(Image.new("RGBA", (W, H), (40, 25, 10, 255)), (0, 0), Image.composite(edge, Image.new("L", (W, H), 0), sh))
+    grad = Image.new("RGB", (len(BANDS), 1))
+    grad.putdata([tuple(int(c[i:i + 2], 16) for i in (1, 3, 5)) for c in BANDS])
+    grad = grad.resize((W, H), Image.BILINEAR).convert("RGBA")
+    solid = lambda c: Image.new("RGBA", (W, H), tuple(int(c[i:i + 2], 16) for i in (1, 3, 5)) + (255,))
+    full = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(full).rectangle((0, 0, W, H), fill=255)
+    inner0 = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(inner0).rounded_rectangle((u * 0.55, u * 0.55, W - u * 0.55, H - u * 0.55), radius=rad + u * 2.4, fill=255)
+    over.paste(solid(INK), (0, 0), Image.composite(Image.new("L", (W, H), 0), full, inner0))   # ink edge (square outside)
+    over.paste(solid(PAPER), (0, 0), ring(u * 0.55, u * 1.9, rad + u * 1.1))                    # cream band
+    over.paste(grad, (0, 0), ring(u * 1.9, u * 2.6, rad + u * 0.4))                             # day-to-night band
+    over.paste(solid(INK), (0, 0), ring(u * 2.6, u * 3.0, rad))                                 # hairline
+    out = art.convert("RGBA")
+    out.alpha_composite(over.resize((w, h), Image.LANCZOS))
+    return out
+
+
+# Formats that sit on a store shelf among other games wear the frame; banners, the hero and
+# the page background (which Steam or the platform lays things over, edge to edge) do not.
+FRAMED = {"steam/main-capsule-1232x706.png": 1.0, "steam/header-capsule-920x430.png": 1.0, "steam/small-capsule-462x174.png": 1.25,
+          "steam/vertical-capsule-748x896.png": 1.0, "steam/library-capsule-600x900.png": 1.0, "steam/package-header-1414x464.png": 1.0}
+
+
 def compose(tmp, logo_dir):
     # the illustration itself (tools/scene.py): one logo-free master, everything else is cut from it
     master = Image.open(os.path.join(tmp, "scene.png")).convert("RGB")
@@ -253,6 +303,8 @@ def compose(tmp, logo_dir):
             art = master.crop((1650, 1010, 3840, 1835)).resize((w, h), Image.LANCZOS).convert("RGBA")
         lg = fit_logo(logo, lw * w, lh * h)
         art.alpha_composite(lg, (int(lx * w + (lw * w - lg.width) / 2), int(ly * h + (lh * h - lg.height) / 2)))
+        if name in FRAMED:
+            art = frame(art, FRAMED[name])
         art.convert("RGB").save(os.path.join(B, name))
     mark_img.resize((800, 800), Image.LANCZOS).save(os.path.join(B, "social/avatar-800x800.png"))
     app = Image.open(os.path.join(logo_dir, "app-icon-1024.png")).convert("RGBA")
