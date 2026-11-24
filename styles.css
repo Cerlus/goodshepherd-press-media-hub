@@ -66,7 +66,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .nav .spacer { flex: 1; }
 
 .hero { position: relative; color: #fffaf0; background: var(--night-deep); overflow: hidden; }
-.hero img.bg { width: 100%; height: min(72vh, 720px); min-height: 380px; object-fit: cover; object-position: 30% 50%; }
+.hero img.bg { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
 .hero .copy { position: absolute; inset: auto 0 0 0; padding-block: 110px 44px; background: linear-gradient(transparent, rgba(20, 17, 31, .88));
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .hero .copy p { font-size: 19px; max-width: 46ch; text-shadow: 0 2px 6px rgba(0, 0, 0, .5); }
@@ -122,11 +122,13 @@ button:hover, .btn:hover { filter: brightness(1.15); }
 .tile span { padding: 10px 14px; font-size: 14px; font-weight: 700; }
 .tile span small { font-weight: 500; opacity: .7; display: block; }
 .tile:hover img { filter: brightness(1.08); }
-.cards { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
-.cards img { width: 170px; transition: transform .25s; filter: drop-shadow(0 10px 16px rgba(0, 0, 0, .25)); }
-.cards img:nth-child(1) { transform: rotate(-6deg) translateY(8px); }
-.cards img:nth-child(3) { transform: rotate(6deg) translateY(8px); }
-.cards img:hover { transform: translateY(-10px) scale(1.04); }
+.cards { display: flex; gap: 14px; justify-content: center; align-items: flex-end; flex-wrap: nowrap; margin: 34px auto 56px; max-width: 980px; padding: 0 12px; }
+.cards img { width: 19%; max-width: 180px; height: auto; transition: transform .25s; filter: drop-shadow(0 10px 16px rgba(0, 0, 0, .35)); }
+.cards img:nth-child(1) { transform: rotate(-6deg) translateY(16px); }
+.cards img:nth-child(2) { transform: rotate(-3deg) translateY(4px); }
+.cards img:nth-child(4) { transform: rotate(3deg) translateY(4px); }
+.cards img:nth-child(5) { transform: rotate(6deg) translateY(16px); }
+.cards img:hover { transform: translateY(-10px) scale(1.04); z-index: 2; position: relative; }
 .placeholder { border: 2px dashed var(--line); border-radius: 14px; padding: 26px; color: var(--fg-soft); text-align: center; }
 
 blockquote.narr { margin: 0; font: italic 500 26px/1.45 var(--body); color: var(--surface-fg); }
@@ -147,3 +149,32 @@ footer a { color: var(--lamp); }
 .mini { padding: 4px 10px; font-size: 12px; background: #2c2546; color: #efe8d8; margin-left: 6px; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
+
+/* --- 2026-11-24: video, the three doors, status, bigger screenshot tiles --- */
+.watch { display: grid; grid-template-columns: 1.65fr 1fr; gap: 22px; margin-top: 26px; align-items: start; }
+.video { margin: 0; }
+.video video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #0d0b14; border-radius: var(--radius); box-shadow: var(--shade); }
+.video figcaption { margin-top: 10px; font-size: 14px; color: var(--fg-soft); }
+.video figcaption b { color: var(--fg); }
+.fine { font-size: 13.5px; color: var(--fg-soft); max-width: 92ch; margin-top: 22px; }
+.doors { grid-template-columns: repeat(3, 1fr); }
+.door { display: flex; flex-direction: column; }
+.door h3 { font-size: 22px; }
+.door ul { margin: 6px 0 18px; padding-left: 20px; flex: 1; }
+.door li { margin: 6px 0; }
+.door .btn { margin-top: 4px; }
+.ticks { list-style: none; margin: 8px 0 0; padding: 0; }
+.ticks li { position: relative; padding-left: 26px; margin: 7px 0; }
+.ticks li::before { content: ""; position: absolute; left: 2px; top: .45em; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); }
+.ticks.next li::before { background: none; box-shadow: inset 0 0 0 2px var(--gold); }
+.gallery.shots { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.gallery.shots .tile img { aspect-ratio: 16 / 9; object-fit: cover; width: 100%; height: auto; }
+.tile.wide img { aspect-ratio: auto; width: 100%; height: auto; }
+@media (max-width: 860px) { .watch, .doors { grid-template-columns: 1fr; } }
+
+/* the key art is shown whole (16:9), never cropped; on small screens the words sit under it */
+.hero { max-width: 1600px; margin-inline: auto; }
+@media (max-width: 980px) { .hero .copy { position: static; padding-block: 22px 26px; background: var(--night-deep); } }
+@media (max-width: 980px) { .strip-wrap { height: auto; padding-top: 18px; } .strip { transform: none; } }
+.gallery:not(.shots) .tile img { object-fit: contain; height: 170px; background: #171228; padding: 8px; }
