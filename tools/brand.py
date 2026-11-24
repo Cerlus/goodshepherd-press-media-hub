@@ -86,7 +86,7 @@ def paper_defs(w):
 
 
 # the sheets of the lettering, back to front: (fill, how far it shows round the letter as a share of the size)
-SHEETS = [(INK, 0.150), ("url(#sh2)", 0.098), ("url(#sh3)", 0.050)]
+SHEETS = [("#3f2a18", 0.128), ("url(#sh2)", 0.098), ("url(#sh3)", 0.050)]   # (the back sheet: dark wood, cut clean, like the staff)
 
 
 def paper_text(text, x, y, size, anchor="middle", spacing=0):
@@ -97,7 +97,7 @@ def paper_text(text, x, y, size, anchor="middle", spacing=0):
     out = ""
     for k, (col, grow) in enumerate(SHEETS):
         drop = size * 0.022 * (len(SHEETS) - k)
-        out += (f'<g filter="url(#{"torn" if k == 0 else "lp2"})"><text {a} transform="translate(0,{drop:.1f})" fill="{col}" stroke="{col}" '
+        out += (f'<g filter="url(#{"lp" if k == 0 else "lp2"})"><text {a} transform="translate(0,{drop:.1f})" fill="{col}" stroke="{col}" '
                 f'stroke-width="{size*grow*2:.1f}">{text}</text></g>')
     return out + f'<g filter="url(#lp2)"><text {a} fill="url(#face)">{text}</text></g>'
 
@@ -186,9 +186,9 @@ def main():
     os.makedirs(tmp, exist_ok=True)
     logo_dir = os.path.join(B, "logo")
     os.makedirs(logo_dir, exist_ok=True)
-    for name, svg in [("logo-stacked.svg", logo_stacked()), ("logo-one-line.svg", logo_line()), ("mark-circle.svg", mark(1024, "circle")), ("mark-app.svg", mark(1024, "squircle"))]:
+    for name, svg in [("logo-stacked.svg", logo_stacked(tagline=False)), ("logo-one-line.svg", logo_line()), ("mark-circle.svg", mark(1024, "circle")), ("mark-app.svg", mark(1024, "squircle"))]:
         open(os.path.join(logo_dir, name), "w").write(svg)
-    jobs = [(logo_stacked(), 1280, 720, os.path.join(B, "steam/library-logo-1280x720.png")),
+    jobs = [(logo_stacked(tagline=False), 1280, 720, os.path.join(B, "steam/library-logo-1280x720.png")),   # Steam wants the name alone here
             (logo_stacked(tagline=False), 1280, 720, os.path.join(tmp, "stack.png")),
             (logo_stacked(tagline=False), 1280, 720, os.path.join(logo_dir, "logo-stacked-1280x720.png")),
             (logo_line(), 1500, 330, os.path.join(tmp, "line.png")),
@@ -255,8 +255,10 @@ def frame(art, weight=1.0):
     ImageDraw.Draw(full).rectangle((0, 0, W, H), fill=255)
     inner0 = Image.new("L", (W, H), 0)
     ImageDraw.Draw(inner0).rounded_rectangle((u * 0.55, u * 0.55, W - u * 0.55, H - u * 0.55), radius=rad + u * 2.4, fill=255)
-    over.paste(solid(INK), (0, 0), Image.composite(Image.new("L", (W, H), 0), full, inner0))   # ink edge (square outside)
-    over.paste(solid(PAPER), (0, 0), ring(u * 0.55, u * 1.9, rad + u * 1.1))                    # cream band
+    # the cream band runs right out to the square edge: no dark corners outside the border
+    hole = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(hole).rounded_rectangle((u * 1.9, u * 1.9, W - u * 1.9, H - u * 1.9), radius=rad + u * 1.1, fill=255)
+    over.paste(solid(PAPER), (0, 0), Image.composite(Image.new("L", (W, H), 0), full, hole))
     over.paste(grad, (0, 0), ring(u * 1.9, u * 2.6, rad + u * 0.4))                             # day-to-night band
     over.paste(solid(INK), (0, 0), ring(u * 2.6, u * 3.0, rad))                                 # hairline
     out = art.convert("RGBA")
