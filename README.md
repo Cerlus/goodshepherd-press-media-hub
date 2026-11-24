@@ -1,6 +1,6 @@
 # Good Shepherd Press & Media Hub
 
-Public press kit for *Good Shepherd* by ArchiusDev: a cozy shepherd sim by day and a narrated dungeon-crawler deckbuilder by night. Target: Steam Sheep Fest, Feb 4–8 2027.
+Public press kit for *Good Shepherd* by ArchiusDev: a cozy shepherd sim by day and a dungeon-crawler deckbuilder by night, told by a narrator. Target: Steam Sheep Fest, Feb 4–8 2027.
 
 Live: https://cerlus.github.io/goodshepherd-press-media-hub/
 

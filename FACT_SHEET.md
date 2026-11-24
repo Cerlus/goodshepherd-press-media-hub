@@ -8,7 +8,7 @@ _Last updated: 2026-11-24_
 
 - **Title:** Good Shepherd *(store title to confirm: "Good Shepherd" vs "GoodShepherd", see README)*
 - **Developer / publisher:** ArchiusDev (self-published)
-- **Developer profile:** Ghanaian-Canadian solo indie developer; previous game *Mancalero* (Steam, Nov 4 2026)
+- **Developer profile:** Solo indie developer from Canada; previous game *Mancalero* (Steam, Nov 4 2026)
 - **Genre:** Cozy first-person shepherd sim + roguelite deckbuilder dungeon crawl, told by a narrator
 - **Engine:** Godot 4
 - **Platforms:** PC (Steam); Windows first *(confirm macOS/Linux)*
@@ -32,13 +32,13 @@ Tend the flock by day. Go after the one by night.
 Tend your flock by day; descend into the dark for one.
 
 ### 25 words
-A cozy shepherd sim by day and a narrated dungeon-crawler deckbuilder by night. Every sheep you care for becomes a card when one goes missing.
+A cozy shepherd sim by day, a dungeon-crawler deckbuilder by night, and a narrator telling the story. Every sheep you tend becomes a card.
 
 ### 50 words
 By day, you tend a flock of named sheep in a sunlit pasture: feed them, water them, bind their wounds, call them home. By night, one goes missing, and you go after it into the dark: a first-person grid crawl and deckbuilder where every bond you made becomes a card.
 
 ### 100 words
-Good Shepherd is two games that need each other. By day it is a cozy first-person shepherd sim: you name your sheep, lead them to green pasture and still waters, anoint them with oil and bind their wounds. By night one of them goes missing, and you leave the ninety-nine to find it. The descent is a first-person grid crawler with turn-based deckbuilder combat, where every sheep that trusts you adds its own card and your lamp oil is your clock. A wry, warm narrator tells the whole thing like a tabletop game master. Care is power. There is no grinding, only love.
+Good Shepherd is two games that need each other. By day it is a cozy first-person shepherd sim: you name your sheep, lead them to green pasture and still waters, anoint them with oil and bind their wounds. By night one of them goes missing, and you leave the ninety-nine to save the one. The descent is a first-person grid crawler with turn-based deckbuilder combat, where every sheep that trusts you adds its own card and your lamp oil is your clock. A wry, warm narrator tells the whole thing like a tabletop game master. Care is power. There is no grinding, only love.
 
 ## Angle-specific pitches
 Use the one that matches the outlet. Same game, different front door.
@@ -51,7 +51,7 @@ Use the one that matches the outlet. Same game, different front door.
 
 ## Key features
 1. **Care is power.** Feeding, watering, anointing and binding wounds raise each sheep's Trust. At Trust 60 that sheep adds its own bond card to your night deck.
-2. **Leave the ninety-nine.** Every night is about one specific, named sheep, the one least bound to you.
+2. **Leave the ninety-nine to save the one.** Every night is about one specific, named sheep, the one least bound to you.
 3. **Your voice.** The Call herds the flock by day and is a card by night. Sheep that know your voice follow it.
 4. **The lamp is your clock.** Each step below burns oil. Run dry and you walk the Valley of the Shadow: vision shrinks and enemies strike first.
 5. **A narrator at the table.** A BG3-style storyteller voices both halves, sets each place, names the stakes, and jokes.
@@ -65,12 +65,12 @@ Use the one that matches the outlet. Same game, different front door.
 13. **Staffs that are alive in the hand.** Water, ember, vine, storm and bell: each from its own land, each with its own cards.
 
 ## Developer bio
-ArchiusDev is a Ghanaian-Canadian solo indie developer making thoughtful games that blend timeless forms with modern design. After *Mancalero* (a Mancala roguelike deckbuilder, Steam 2026), *Good Shepherd* pairs a cozy life sim with a narrated dungeon-crawler deckbuilder.
+ArchiusDev is a solo indie developer from Canada making thoughtful games that blend timeless forms with modern design. After *Mancalero* (a Mancala roguelike deckbuilder, Steam 2026), *Good Shepherd* pairs a cozy life sim with a dungeon-crawler deckbuilder, told by a narrator.
 
 ## FAQ answers
 **Is it a religious game?** It's inspired by the shepherd passages of the Bible (Psalm 23, John 10, Luke 15) and keeps them in the mechanics rather than in sermons. You don't need to share the faith to enjoy it, and players who do share it will recognise it everywhere.
 
-**Can sheep die?** No. Sheep can be lost and frightened, never killed. The night is a rescue, not a punishment.
+**Is there a story?** Yes. A narrator tells it as you go: she sets each new land, speaks when you meet something for the first time, and carries the tale from the first pasture to the last night.
 
 **Do I have to be good at deckbuilders?** No. A gentle night setting gives more oil and longer enemy telegraphs. Deckbuilder players can take a "rest day" to skip chores.
 
