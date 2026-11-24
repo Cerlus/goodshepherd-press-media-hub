@@ -2,7 +2,7 @@
 
 Copy-paste source for showcases, festivals, curators, press and creators. Facts here must stay true; update the date stamps when anything changes.
 
-_Last updated: 2026-11-09_
+_Last updated: 2026-11-24_
 
 ## Core facts
 
@@ -17,8 +17,9 @@ _Last updated: 2026-11-09_
 - **Demo:** planned for Sheep Fest; Steam Next Fest (Feb 22 – Mar 1, 2027) is the natural follow-on
 - **Release:** TBA
 - **Price:** TBA
-- **Input:** Mouse and keyboard; controller support in progress
-- **Languages:** English (narration + subtitles)
+- **Input:** Mouse and keyboard, or controller (prompts for Xbox, PlayStation and Nintendo pads); hardware testing in progress
+- **Languages:** English (narration + subtitles); Steam page text in 13 languages
+- **Structure:** five lands of five nights each, each ending in a boss (the first is built)
 - **Press contact:** needle-blares.0m@icloud.com
 - **Socials:** https://linktr.ee/archiusdev
 
@@ -57,8 +58,11 @@ Use the one that matches the outlet. Same game, different front door.
 6. **One satchel, two worlds.** Oil, linen, hyssop and smooth stones gathered by day are your consumables below. An oil flask spent on a sheep's head is light you won't have tonight.
 7. **Weather with rules.** Fog halves your call range, rain lets sheep drink anywhere, and a red sky at evening means fair tomorrow.
 8. **A storybook world.** Flat-shaded paper-cut 3D, ink-hatched dungeons and hand-built paper cards.
-9. **Five lands.** The flock moves on through Green Pastures, the Dry Country, the Oasis, the High Snows and the Valley of the Shadows. Each land has its own weather and needs by day, and its own beasts below (scorpions, a crocodile, a wild boar, shades).
+9. **Five lands.** The flock moves on through the Grasslands, the Dry Country, the Oasis, the High Snows and the Valley of the Shadows. Each land has its own weather and needs by day, and its own beasts below (scorpions, a crocodile, a wild boar, shades).
 10. **A flock that is yours.** Hats, scarves, flower crowns and angel wings for the sheep, and a cuddle button. None of it does anything; that is the point.
+11. **A false shepherd.** The Grasslands end with a hireling in a stolen fleece who lures your own sheep into his sack; strike him and they break free.
+12. **A journal that fills in.** Every beast met and every thing found goes into the Compendium, with what the narrator said the first time.
+13. **Staffs that are alive in the hand.** Water, ember, vine, storm and bell: each from its own land, each with its own cards.
 
 ## Developer bio
 ArchiusDev is a Ghanaian-Canadian solo indie developer making thoughtful games that blend timeless forms with modern design. After *Mancalero* (a Mancala roguelike deckbuilder, Steam 2026), *Good Shepherd* pairs a cozy life sim with a narrated dungeon-crawler deckbuilder.
@@ -78,3 +82,8 @@ ArchiusDev is a Ghanaian-Canadian solo indie developer making thoughtful games t
 
 ## Comparable games (for "if you liked…")
 *Cult of the Lamb* (in reverse: the shepherd lays himself down for the lamb) · *Slay the Spire* · *Darkest Dungeon* (narrated descent) · *Stardew Valley* · *Legend of Grimrock* · *Inscryption* (cards at a table)
+
+## Media notes
+- Videos on the press page (`assets/video`): the work-in-progress trailer, the opening storybook, and the staffs in motion. Captured from the development build.
+- Music in those videos is a stand-in until the commissioned score: "Enchanted Valley", "Crossing the Chasm", "At Rest" and "Meditation Impromptu 02" by Kevin MacLeod (incompetech.com), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Credit it if you reuse the videos' audio.
+- The narrator's voice is synthesized.

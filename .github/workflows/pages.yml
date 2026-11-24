@@ -24,7 +24,7 @@ jobs:
         run: |
           mkdir -p assets/press-kit
           rm -f assets/press-kit/goodshepherd-press-kit.zip
-          zip -r -q assets/press-kit/goodshepherd-press-kit.zip assets/branding assets/cards assets/screenshots assets/fonts/*OFL.txt FACT_SHEET.md
+          zip -r -q assets/press-kit/goodshepherd-press-kit.zip assets/branding assets/cards assets/screenshots assets/video assets/fonts/*OFL.txt FACT_SHEET.md -x "assets/screenshots/thumbs/*"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
