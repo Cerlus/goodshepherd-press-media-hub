@@ -15,6 +15,7 @@ import brand
 import capsule_lab as L
 import capsule_drafts as D
 import logo_drafts as LG
+import keyscene
 
 ROOT, B = brand.ROOT, brand.B
 OUT = os.path.join(ROOT, "lab", "capsules", "set")
@@ -49,7 +50,7 @@ def main():
     D.raster([("d_mark_circle", LG.mark("circle"), 1024, 1024), ("d_mark_app", LG.mark("squircle"), 1024, 1024)])
     extra = f'<ellipse cx="1500" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.cloud(1050, 1010, 0.8) + S.cloud(700, 620, 1.0)
     D.raster([("d_bg", D.bold(L.backdrop(extra)), D.W, D.H), ("d_man", D.bold(L.defs() + S.shepherd(1500, 1960, 1.0, "upright") + "</svg>"), D.W, D.H),
-              ("d_scene", D.bold(S.scene()), D.W, D.H)])
+              ("d_scene", keyscene.scene(), D.W, D.H)])   # the wide scene: tools/keyscene.py
     T = lambda n: Image.open(os.path.join(D.TMP, n + ".png"))
     stack = Image.open(os.path.join(ROOT, "lab", "logos", "6-blend.png")).convert("RGBA")
     line = Image.open(os.path.join(ROOT, "lab", "logos", "7-blend-one-line.png")).convert("RGBA")
@@ -86,9 +87,9 @@ def main():
     master.crop((0, 800, 3840, 2040)).save(os.path.join(B, "steam", "library-hero-3840x1240.png"))
     pv(master.crop((0, 800, 3840, 2040)).resize((1920, 620), Image.LANCZOS), "hero")
     master.resize((1438, 810), Image.LANCZOS).save(os.path.join(B, "steam", "page-background-1438x810.png"))
-    plan = [("goodshepherd-key-art-1920x1080.png", (1920, 1080), 0.50, 1.0, (0.595, 0.045, 0.385, 0.36), "key-art"),
+    plan = [("goodshepherd-key-art-1920x1080.png", (1920, 1080), 0.50, 1.0, (0.25, 0.012, 0.50, 0.425), "key-art"),   # the name centred over him, as large as the sky allows
             ("social/x-bluesky-header-1500x500.png", (1500, 500), 0.58, 0.90, (0.60, 0.06, 0.38, 0.66), None),
-            ("social/youtube-banner-2560x1440.png", (2560, 1440), 0.50, 1.0, (0.575, 0.355, 0.225, 0.21), None),
+            ("social/youtube-banner-2560x1440.png", (2560, 1440), 0.50, 1.0, (0.39, 0.30, 0.22, 0.16), None),
             ("social/portrait-post-1080x1350.png", (1080, 1350), 0.53, 1.0, (0.08, 0.12, 0.84, 0.27), "portrait")]
     for name, (w, h), fx, fy, (lx, ly, lw, lh), prev in plan:
         art = brand.crop_art(master, w, h, fx, fy).convert("RGBA")
