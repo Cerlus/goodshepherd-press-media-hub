@@ -128,7 +128,7 @@ def shepherd(x, y, s=1.0, lamb="across"):
     out.append(f'<g filter="url(#paper)"><path d="M{P(-200,-700)} Q{P(-250,-560)} {P(-150,-520)} L{P(-60,-560)} L{P(-70,-640)} Q{P(-130,-640)} {P(-140,-720)} Z" fill="{robe_l}"/>'
                f'<path d="M{P(200,-700)} Q{P(250,-560)} {P(150,-520)} L{P(60,-560)} L{P(70,-640)} Q{P(130,-640)} {P(140,-720)} Z" fill="{robe_d}"/></g>')
     # the robe's neck, closing the chest under the beard
-    out.append(f'<path d="M{P(-150,-700)} L{P(150,-700)} L{P(96,-540)} L{P(-96,-540)} Z" fill="{robe}"/><path d="M{P(-40,-700)} L{P(40,-700)} L{P(0,-610)} Z" fill="{robe_d}"/>')
+    out.append(f'<path d="M{P(-150,-770)} L{P(150,-770)} L{P(96,-540)} L{P(-96,-540)} Z" fill="{robe}"/><path d="M{P(-40,-700)} L{P(40,-700)} L{P(0,-610)} Z" fill="{robe_d}"/>')
     # lamb's legs hanging down his chest, one pair each side, and the hands that hold them
     for d in (-1, 1):
         second = "" if up else f'<rect x="{x+(d*78-15)*s:.1f}" y="{y-760*s:.1f}" width="{30*s:.1f}" height="{206*s:.1f}" rx="{14*s:.1f}" fill="#efe7d6"/><rect x="{x+(d*78-17)*s:.1f}" y="{y-578*s:.1f}" width="{34*s:.1f}" height="{30*s:.1f}" rx="{10*s:.1f}" fill="{FACE}"/>'

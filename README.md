@@ -12,6 +12,8 @@ Settings → Pages → Source: **GitHub Actions**. The workflow deploys every pu
 
 `assets/screenshots` holds 1920 x 1080 captures from the development build (`tests/press_shots.gd` in the game repo makes most of them; `thumbs/` are the page's small copies). `assets/video` holds the work-in-progress trailer, the opening storybook and the staffs clip; their music is a stand-in under CC BY 4.0 (credited on the page).
 
+`python3 tools/capsule_set.py --ship` is the current look (2026-11-28) and runs after `brand.py`: bolder day-to-night colour, the blended logo (`tools/logo_drafts.py`), a night-indigo outline round the shepherd, cards and letters, and a slim gold-to-blue edge on each capsule. It writes the capsules, logos, library hero, key art, page background and social banners. `brand.py` still makes the emblem and app icon.
+
 ## Look
 The page background follows the day: the `data-bg` attribute on `<html>` picks the palette (`dusk` = Day to Night; also `night`, `meadow`, `wool`, `paper`).
 
