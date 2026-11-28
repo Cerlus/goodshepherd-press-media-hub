@@ -49,7 +49,8 @@ def main():
     subprocess.run([sys.executable, os.path.join(ROOT, "tools", "logo_drafts.py"), "--only", "6-blend"], check=True)
     D.raster([("d_mark_circle", LG.mark("circle"), 1024, 1024), ("d_mark_app", LG.mark("squircle"), 1024, 1024)])
     extra = f'<ellipse cx="1500" cy="1500" rx="900" ry="620" fill="url(#lampspill)"/>' + S.cloud(1050, 1010, 0.8) + S.cloud(700, 620, 1.0)
-    D.raster([("d_bg", D.bold(L.backdrop(extra)), D.W, D.H), ("d_man", D.bold(L.defs() + S.shepherd(1500, 1960, 1.0, "upright") + "</svg>"), D.W, D.H),
+    # the capsules' ground is the key scene itself (tools/keyscene.py) without its shepherd; he is drawn large over it
+    D.raster([("d_bg", keyscene.scene(False), D.W, D.H), ("d_man", D.bold(L.defs() + S.shepherd(1500, 1960, 1.0, "upright") + "</svg>"), D.W, D.H),
               ("d_scene", keyscene.scene(), D.W, D.H)])   # the wide scene: tools/keyscene.py
     T = lambda n: Image.open(os.path.join(D.TMP, n + ".png"))
     stack = Image.open(os.path.join(ROOT, "lab", "logos", "6-blend.png")).convert("RGBA")

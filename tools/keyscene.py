@@ -164,7 +164,7 @@ def den(x, y, s=1.0):
     return "".join(out)
 
 
-def scene():
+def scene(shepherd=True):
     rnd = random.Random(7)
     d = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}"><defs>'
          f'<filter id="paper" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="12" stdDeviation="7" flood-color="#150e1e" flood-opacity=".4"/></filter>'
@@ -220,7 +220,8 @@ def scene():
     d.append(f'<rect x="2200" y="1560" width="1640" height="130" fill="#8f86d8" opacity=".12" filter="url(#b40)"/>')
     # the last warm light of the day round him, then the shepherd, centred
     d.append(f'<ellipse cx="1920" cy="1500" rx="900" ry="640" fill="url(#lampspill)"/>')
-    d.append(S.shepherd(1920, 1975, 0.8, "upright"))   # (the lamb upright on his shoulders, as on the capsules: slung across, its hanging head read as a beard)
+    if shepherd:
+        d.append(S.shepherd(1920, 1975, 0.8, "upright"))   # (the lamb upright on his shoulders, as on the capsules: slung across, its hanging head read as a beard)
     d.append(ridge("url(#h5)", [(0, 2020), (600, 1970), (1300, 2030), (2000, 1995), (2700, 2040), (3300, 1985), (W, 2030)]))
     for fx, fy, fs, col in [(160, 2110, 1.3, "#c9483c"), (420, 2050, 0.9, "#f5b53a"), (640, 2090, 1.0, "#c9483c"), (900, 2060, 0.8, "#ffffff"), (1180, 2120, 1.2, "#c9483c"), (1440, 2060, 0.8, "#f5b53a"), (1640, 2100, 0.9, "#c9483c")]:
         d.append(S.flower(fx, fy, fs, col))
