@@ -22,7 +22,7 @@ K = 2                          # supersample
 # bolder paper: the same day-to-night run, more colour in it, crisper cut shadows
 BOLD = {"#a9cde2": "#4fb4ee", "#d9e6dc": "#a8def4", "#f6dca4": "#ffe9b8", "#e79a6c": "#b9a0e6", "#7a4f86": "#5a45b0",   # (day blue, a pale gold at the turn, then dusk violet: no orange-pink sunset)
         "#2f2558": "#2c1f7a", "#151030": "#130c40",
-        "#c6dcc8": "#a8e09a", "#a3c394": "#7dd072", "#84ab72": "#52b955", "#6f995f": "#35a04a", "#c9804a": "#e0762e",
+        "#c6dcc8": "#a8e09a", "#a3c394": "#7dd072", "#84ab72": "#52b955", "#6f995f": "#35a04a", "#c9804a": "#cf7a3c",
         "#4b3f78": "#4a3aa6", "#3a2f62": "#372a86", "#2c2450": "#281d68", "#221b40": "#1c144e", "#191430": "#140e36",
         'stdDeviation="12" flood-color="#150e1e" flood-opacity=".3"': 'stdDeviation="5" flood-color="#150e1e" flood-opacity=".45"'}
 

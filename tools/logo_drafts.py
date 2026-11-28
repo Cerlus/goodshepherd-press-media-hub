@@ -172,7 +172,7 @@ def d5():
     return svg([ce, e1, e2, f1, f2, cf, sheep(x + 175, 336, 0.95, True), wolf(r_[1] + 90, r_[5] + 4, 0.56, False)])
 
 
-def d6():
+def d6(animals=True):
     """The blend Daniel chose: #1's centred lettering (gold under 'Good', night blue under
     'Shepherd'), #3's crook as the underline with no lamp, #2's sheep on the G and wolf on 'er'."""
     dg, bg = text("Good", 720, 345, 290, anchor="middle")
@@ -182,7 +182,31 @@ def d6():
     und = f"M{x0},{765} L{x1-96},{765} C{x1-10},{765} {x1},{716} {x1},{672} C{x1},{618} {x1-76},{618} {x1-76},{670}"
     ce, cf = staff(und, 28)
     g_, r = box(bg, "G"), box(bs, "r")
-    return svg([ce, e1, e2, f1, f2, cf, wolf(r[1] + 84, r[5] + 4, 0.5, False), sheep(g_[1] + 118, g_[5] - 4, 0.95, True)])
+    return svg([ce, e1, e2, f1, f2, cf] + ([wolf(r[1] + 84, r[5] + 4, 0.5, False), sheep(g_[1] + 118, g_[5] - 4, 0.95, True)] if animals else []))
+
+
+def d8():
+    """The chosen logo without the sheep and the wolf: for the small capsule, where the letters must fill the height."""
+    return d6(False)
+
+
+def mark(shape="circle"):
+    """The emblem and app icon in the logo's look: day on the left with the sheep, night on the
+    right with the wolf, the crook between them (no lamp), an indigo and gold edge."""
+    clip = '<circle cx="512" cy="512" r="470"/>' if shape == "circle" else '<rect x="42" y="42" width="940" height="940" rx="210"/>'
+    ring = (f'<circle cx="512" cy="512" r="474" fill="none" stroke="{EDGE}" stroke-width="44"/><circle cx="512" cy="512" r="468" fill="none" stroke="{GOLD}" stroke-width="16"/>'
+            if shape == "circle" else
+            f'<rect x="40" y="40" width="944" height="944" rx="212" fill="none" stroke="{EDGE}" stroke-width="44"/><rect x="48" y="48" width="928" height="928" rx="204" fill="none" stroke="{GOLD}" stroke-width="16"/>')
+    ce, cf = staff(hook(512, 1010, 250, 104, 1), 46)
+    body = (f'<defs><clipPath id="c">{clip}</clipPath><linearGradient id="day" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fb4ee"/><stop offset="1" stop-color="#c9ecf7"/></linearGradient>'
+            f'<linearGradient id="night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#130c40"/><stop offset="1" stop-color="#4a3aa6"/></linearGradient></defs>'
+            f'<g clip-path="url(#c)"><rect x="0" y="0" width="512" height="1024" fill="url(#day)"/><rect x="512" y="0" width="512" height="1024" fill="url(#night)"/>'
+            f'<circle cx="270" cy="300" r="150" fill="#fff3cf" opacity=".5"/><circle cx="270" cy="300" r="92" fill="{GOLD}"/>'
+            f'<path d="M800,190 a84,84 0 1,0 60,150 a70,70 0 1,1 -60,-150z" fill="{CREAM}"/><g fill="{CREAM}"><circle cx="660" cy="330" r="7"/><circle cx="900" cy="440" r="6"/><circle cx="640" cy="200" r="5"/><circle cx="915" cy="270" r="5"/></g>'
+            f'<path d="M0,730 C200,650 400,670 512,705 L512,1024 L0,1024z" fill="#52b955"/><path d="M0,830 C220,770 400,790 512,815 L512,1024 L0,1024z" fill="#35a04a"/>'
+            f'<path d="M512,705 C700,665 880,695 1024,745 L1024,1024 L512,1024z" fill="#372a86"/><path d="M512,815 C720,785 900,815 1024,850 L1024,1024 L512,1024z" fill="#1c144e"/>'
+            f'{ce}{cf}{sheep(270, 850, 2.1, True)}{wolf(770, 850, 0.78, False)}</g>{ring}')
+    return f'<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">{body}</svg>'
 
 
 def d7():
@@ -198,7 +222,7 @@ def d7():
     return svg([ce, e1, e2, f1, f2, cf, wolf(r[1] + 50, r[5] + 3, 0.36, False), sheep(g_[1] + 80, g_[5] - 3, 0.66, True)])
 
 
-DRAFTS = [("1-crook-d-and-lamp", d1), ("2-crook-wolf-under-the-hook", d2), ("3-the-two-os", d3), ("4-plaque", d4), ("5-kept-under-the-hook", d5), ("6-blend", d6), ("7-blend-one-line", d7)]
+DRAFTS = [("1-crook-d-and-lamp", d1), ("2-crook-wolf-under-the-hook", d2), ("3-the-two-os", d3), ("4-plaque", d4), ("5-kept-under-the-hook", d5), ("6-blend", d6), ("7-blend-one-line", d7), ("8-blend-plain", d8)]
 
 
 def main():
